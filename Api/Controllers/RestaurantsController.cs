@@ -204,6 +204,67 @@ namespace Api.Controllers
             return Ok(categories);
         }
 
+        [HttpGet]
+        [Route("categories/{Id}")]
+        public IActionResult GetRestaurantCategoryById([FromRoute]int Id)
+        {
+            var categories = restaurantService.GetRestaurantCategoryById(Id);
+            if (categories == null)
+                return NotFound();
+
+            return Ok(categories);
+        }
+
+        [HttpPost("categories/create")]
+        public IActionResult AddRestaurantCategory([FromBody]RestaurantCategoryCreateDTO categoryCreateDTO)
+        {
+            if (categoryCreateDTO == null)
+                return BadRequest("Request is null!");
+
+            if (!ModelState.IsValid)
+                return BadRequest("Data validation errors!");
+
+            var category = new RestaurantCategory()
+            {
+                Name = categoryCreateDTO.Name,
+            };
+            var categoryCreated = restaurantService.CreateNewRestaurantCategory(category);
+
+            return Ok(categoryCreated);
+        }
+
+        [HttpPut("categories/edit/{Id}")]
+        public IActionResult EditResturantCategory([FromBody] RestaurantCategoryUpdateDTO restaurantRequest,int id)
+        {
+            if (restaurantRequest == null)
+                return BadRequest("Request is null!");
+
+            if (!ModelState.IsValid)
+                return BadRequest("Data validation errors!");
+
+            RestaurantCategory restaurantCategory = restaurantService.GetRestaurantCategoryById(id);
+            if(restaurantCategory == null)
+                return NotFound();
+
+            restaurantCategory.Name = restaurantRequest.Name;
+
+            var response = restaurantService.UpdateRestaurantCategory(restaurantCategory);
+            return Ok(response);
+        }
+
+        [HttpDelete("categories/delete/{Id}")]
+        public IActionResult DeleteRestaurantCategory(int Id)
+        {
+            if (Id == null)
+                return BadRequest("Category is null!");
+            RestaurantCategory restaurantCategory = restaurantService.GetRestaurantCategoryById(Id);
+            if (restaurantCategory == null)
+                return NotFound();
+            restaurantService.DeleteRestaurantCategory(restaurantCategory);
+
+            return Ok();
+        }
+
         [HttpGet("areas")]
         public IActionResult GetAreas()
         {

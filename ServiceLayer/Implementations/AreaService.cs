@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ServiceLayer.Implementations
 {
@@ -35,6 +36,21 @@ namespace ServiceLayer.Implementations
         public Area GetAreaById(int areaId)
         {
             return uow.AreaRepository.Get(areaId);
+        }
+
+        public Task<Area> UpdateArea(Area area)
+        {
+            if (area == null)
+                throw new Exception("Area cannot be null");
+
+            var areaGet = uow.AreaRepository.Get(area.Id);
+            if (areaGet == null)
+                throw new Exception("Area Not Found");
+
+            var updatedArea = uow.AreaRepository.UpdateAsync(area, area.Id);
+            uow.Complete();
+            return updatedArea;
+
         }
     }
 }

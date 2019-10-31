@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ServiceLayer.Contracts
 {
@@ -13,5 +14,10 @@ namespace ServiceLayer.Contracts
         List<MealType> GetAllMealTypesByRestaurantId(int restaurantid);
         List<Area> GetAreas();
         List<RestaurantCategory> GetRestaurantCategories();
+        RestaurantCategory GetRestaurantCategoryById(int resturantId);
+        Restaurant GetRestaurantById(int restaurantId);
+        Task<RestaurantCategory> UpdateRestaurantCategory(RestaurantCategory restaurantCategory);
+        RestaurantCategory CreateNewRestaurantCategory(RestaurantCategory restaurantCategory);
+        void DeleteRestaurantCategory(RestaurantCategory restaurantCategory);
     }
 }

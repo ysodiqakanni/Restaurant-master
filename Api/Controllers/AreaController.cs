@@ -34,6 +34,8 @@ namespace Api.Controllers
         public IActionResult GetById([FromRoute]int Id)
         {
             var areas = areaService.GetAreaById(Id);
+            if (areas == null)
+                return NotFound();
             return Ok(areas);
         }
 
@@ -56,5 +58,24 @@ namespace Api.Controllers
 
             return Ok(response);
         }
+
+        [HttpPut]
+        public IActionResult UpdateArea([FromBody]AreaUpdateRequestDTO areaDTO)
+        {
+            if (areaDTO == null)
+                return BadRequest("Request is null!");
+
+            if (!ModelState.IsValid)
+                return BadRequest("Data validation errors!");
+
+            Area area = areaService.GetAreaById(areaDTO.Id);
+            area.Name = areaDTO.Name;
+
+            var response = areaService.UpdateArea(area);
+            return Ok(response);
+
+        }
+
+        
     }
 }
