@@ -1,0 +1,448 @@
+﻿@model Web.Models.CreateRestaurantViewModel
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create new restaurant</h2>
+
+@using (Html.BeginForm("Create", "Restaurants", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="text-danger">
+        @Html.ValidationSummary()
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-2">
+            @Html.LabelFor(m => m.Name)
+        </div>
+        <div class=" col-md-6">
+            @Html.EditorFor(m => m.Name)
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(m => m.Address)
+        </div>
+        <div class=" col-md-6">
+            @Html.EditorFor(m => m.Address)
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(m => m.PhoneNumber)
+        </div>
+        <div class=" col-md-6">
+            @Html.EditorFor(m => m.PhoneNumber)
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(m => m.Latitude)
+        </div>
+        <div class=" col-md-6">
+            @Html.EditorFor(m => m.Latitude)
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(m => m.Longitude)
+        </div>
+        <div class=" col-md-6">
+            @Html.EditorFor(m => m.Longitude)
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(m => m.Priority)
+        </div>
+        <div class=" col-md-6">
+            @Html.EditorFor(m => m.Priority)
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-2">
+            Select Area
+        </div>
+        <div class=" col-md-10">
+            @Html.DropDownList("AreaId", new SelectList(ViewBag.AreaId, "Id", "Name"), "Select")
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-2">
+            Restaurant Category
+        </div>
+        <div class=" col-md-10">
+            @Html.DropDownList("RestaurantCategoryId", new SelectList(ViewBag.RestaurantCategoryId, "Id", "Name"), "Select")
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(m => m.Description)
+        </div>
+        <div class=" col-md-10">
+            @Html.TextAreaFor(m => m.Description)
+        </div>
+    </div>
+
+    @*<div class="form-group row">
+        <div class="col-md-2">
+            Image 1
+        </div>
+        <div class="col-md-3">
+            <label>Priority</label>
+            <input type="number" size="2" />
+        </div>
+        <div class=" col-md-6">
+            <input type="file" name="myImage" accept="image/x-png,image/gif,image/jpeg" multiple />
+        </div>
+    </div>*@
+
+
+
+
+
+    <button id="addNewImage" type="button">Add Image</button>
+    <br /><br />
+    <table id="images-table">
+        <tbody></tbody>
+    </table>
+    @*@if (Model.Images != null)
+        {
+            for (int i = 0; i < Model.Images.Count; i++)
+            {
+                <tr>
+                    <td>
+                        <button type="button">Delete</button>
+                        @Html.Hidden("Images.Index", i)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(m => Model.Images[i].ImagePriority)
+                    </td>
+                    <td>
+                        @Html.EditorFor(m => Model.Images[i].File)
+                    </td>
+                </tr>
+            }
+        }*@
+
+
+
+
+    @*<div class="form-group row">
+            <div class="col-md-2">
+                Image 2
+            </div>
+            <div class="col-md-3">
+                <label>Priority</label>
+                <input type="number" size="2" />
+            </div>
+            <div class=" col-md-6">
+                <input type="file" name="myImage" accept="image/x-png,image/gif,image/jpeg" multiple />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-2">
+                Image 3
+            </div>
+            <div class="col-md-3">
+                <label>Priority</label>
+                <input type="number" size="2" />
+            </div>
+            <div class=" col-md-6">
+                <input type="file" name="myImage" accept="image/x-png,image/gif,image/jpeg" multiple />
+            </div>
+        </div>*@
+
+    <br /><br />
+    <div class="form-group row">
+        <div class="col-md-2">
+            Monday
+        </div>
+        <div class="col-md-10 form-inline">
+            From:
+            <select name="MondayFromHour">
+                <option value="">Select</option>
+                @for (int i = 0; i < 24; i++)
+                {
+                    <option>@i</option>
+                }
+            </select>
+            <select name="MondayFromMinute">
+                @for (int i = 0; i < 60; i++)
+                {
+                    <option>@i</option>
+                }
+            </select>
+            <div style="margin-left:20px;">To:</div>
+            <select name="MondaytoHour">
+                <option value="">Select</option>
+                @for (int i = 0; i < 24; i++)
+                {
+                    <option>@i</option>
+                }
+            </select>
+            <select name="MondayToMinute">
+                @for (int i = 0; i < 60; i++)
+                {
+                    <option>@i</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-2">
+            Tuesday
+        </div>
+        <div class="col-md-10 form-inline">
+            From:
+            <select name="TuesdayFromHour">
+                <option value="">Select</option>
+                @for (int i = 0; i < 24; i++)
+                {
+                    <option>@i</option>
+                }
+            </select>
+            <select name="TuesdayFromMinute">
+                @for (int i = 0; i < 60; i++)
+                {
+                    <option>@i</option>
+                }
+            </select>
+            <div style="margin-left:20px;">To:</div>
+            <select name="TuesdaytoHour">
+                <option value="">Select</option>
+                @for (int i = 0; i < 24; i++)
+                {
+                    <option>@i</option>
+                }
+            </select>
+            <select name="TuesdayToMinute">
+                @for (int i = 0; i < 60; i++)
+                {
+                    <option>@i</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-2">
+            Wednesday
+        </div>
+        <div class="col-md-10 form-inline">
+            From:
+            <select name="WednesdayFromHour">
+                <option value="">Select</option>
+                @for (int i = 0; i < 24; i++)
+                {
+                    <option>@i</option>
+                }
+            </select>
+            <select name="WednesdayFromMinute">
+                @for (int i = 0; i < 60; i++)
+                {
+                    <option>@i</option>
+                }
+            </select>
+            <div style="margin-left:20px;">To:</div>
+            <select name="WednesdaytoHour">
+                <option value="">Select</option>
+                @for (int i = 0; i < 24; i++)
+                {
+                    <option>@i</option>
+                }
+            </select>
+            <select name="WednesdayToMinute">
+                @for (int i = 0; i < 60; i++)
+                {
+                    <option>@i</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-2">
+            Thursday
+        </div>
+        <div class="col-md-10 form-inline">
+            From:
+            <select name="ThursdayFromHour">
+                <option value="">Select</option>
+                @for (int i = 0; i < 24; i++)
+                {
+                    <option>@i</option>
+                }
+            </select>
+            <select name="ThursdayFromMinute">
+                @for (int i = 0; i < 60; i++)
+                {
+                    <option>@i</option>
+                }
+            </select>
+            <div style="margin-left:20px;">To:</div>
+            <select name="ThursdaytoHour">
+                <option value="">Select</option>
+                @for (int i = 0; i < 24; i++)
+                {
+                    <option>@i</option>
+                }
+            </select>
+            <select name="ThursdayToMinute">
+                @for (int i = 0; i < 60; i++)
+                {
+                    <option>@i</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-2">
+            Friday
+        </div>
+        <div class="col-md-10 form-inline">
+            From:
+            <select name="FridayFromHour">
+                <option value="">Select</option>
+                @for (int i = 0; i < 24; i++)
+                {
+                    <option>@i</option>
+                }
+            </select>
+            <select name="FridayFromMinute">
+                @for (int i = 0; i < 60; i++)
+                {
+                    <option>@i</option>
+                }
+            </select>
+            <div style="margin-left:20px;">To:</div>
+            <select name="FridaytoHour">
+                <option value="">Select</option>
+                @for (int i = 0; i < 24; i++)
+                {
+                    <option>@i</option>
+                }
+            </select>
+            <select name="FridayToMinute">
+                @for (int i = 0; i < 60; i++)
+                {
+                    <option>@i</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-2">
+            Saturday
+        </div>
+        <div class="col-md-10 form-inline">
+            From:
+            <select name="SaturdayFromHour">
+                <option value="">Select</option>
+                @for (int i = 0; i < 24; i++)
+                {
+                    <option>@i</option>
+                }
+            </select>
+            <select name="SaturdayFromMinute">
+                @for (int i = 0; i < 60; i++)
+                {
+                    <option>@i</option>
+                }
+            </select>
+            <div style="margin-left:20px;">To:</div>
+            <select name="SaturdaytoHour">
+                <option value="">Select</option>
+                @for (int i = 0; i < 24; i++)
+                {
+                    <option>@i</option>
+                }
+            </select>
+            <select name="SaturdayToMinute">
+                @for (int i = 0; i < 60; i++)
+                {
+                    <option>@i</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-2">
+            Sunday
+        </div>
+        <div class="col-md-10 form-inline">
+            From:
+            <select name="SundayFromHour">
+                <option value="">Select</option>
+                @for (int i = 0; i < 24; i++)
+                {
+                    <option>@i</option>
+                }
+            </select>
+            <select name="SundayFromMinute">
+                @for (int i = 0; i < 60; i++)
+                {
+                    <option>@i</option>
+                }
+            </select>
+            <div style="margin-left:20px;">To:</div>
+
+            <select name="SundaytoHour">
+                <option value="">Select</option>
+                @for (int i = 0; i < 24; i++)
+                {
+                    <option>@i</option>
+                }
+            </select>
+            <select name="SundayToMinute">
+                @for (int i = 0; i < 60; i++)
+                {
+                    <option>@i</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div>
+        <input type="submit" value="Submit" />
+    </div>
+}
+
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script type="text/javascript">
+    var hidden = '@Html.Hidden("Images.Index", "{id}")';
+    var priorityHtml = '<input type="number" placeholder="Priority" name="Images[{id}].ImagePriority"/>';//   '@Html.TextBox("Images[{id}].ImagePriority")';
+    var fileHtml = ' <input id="Images[{id}].File" name="Images[{id}].ImageUrl" type="file" accept="image/x-png,image/gif,image/jpeg"/>';//  '@Html.Editor("Images[{id}].ImageUrl")';
+
+    $("#addNewImage").on("click", function () {
+            var time = Date.now();
+
+            var deleteHtml = "<button type='button' onclick='deleteImageRow(this)' style='color:red'>Delete</button>";
+
+            $("#images-table").find("tbody")
+             .append($("<tr><td>" + hidden.replace("{id}", time) + deleteHtml + "</td>" +
+                 "<td>" + priorityHtml.replace("{id}", time) + "</td>" +
+                 "<td>" + fileHtml.replace("{id}", time) + "</td></tr>"));
+    });
+
+
+    function deleteImageRow(el) {
+        if (confirm('Are you sure you want to remove this record?')) {
+            $(el).closest("tr").remove();
+        }
+    }
+
+</script>

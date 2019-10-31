@@ -1,0 +1,143 @@
+﻿@model Web.Models.AddMealViewModel
+@{
+    ViewData["Title"] = "AddMeal";
+}
+
+<h2>Add Meal</h2>
+
+
+@using (Html.BeginForm("AddMeal", "Restaurants", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="text-danger">
+        @Html.ValidationSummary()
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-2">
+            @Html.LabelFor(m => m.Name)
+        </div>
+        <div class=" col-md-6">
+            @Html.EditorFor(m => m.Name)
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(m => m.Price)
+        </div>
+        <div class=" col-md-6">
+            @Html.EditorFor(m => m.Price)
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(m => m.LocalPriority)
+        </div>
+        <div class=" col-md-6">
+            @Html.EditorFor(m => m.LocalPriority)
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(m => m.GeneralPriority)
+        </div>
+        <div class=" col-md-6">
+            @Html.EditorFor(m => m.GeneralPriority)
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(m => m.Description)
+        </div>
+        <div class=" col-md-10">
+            @Html.TextAreaFor(m => m.Description)
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-2">
+            Meal Category
+        </div>
+        <div class=" col-md-10">
+            @Html.DropDownList("MealCategoryId", new SelectList(ViewBag.MealCategoryId, "Id", "Name"), "Select")
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-2">
+            Select Restaurant
+        </div>
+        <div class=" col-md-10">
+            @Html.DropDownList("RestaurantId", new SelectList(ViewBag.RestaurantId, "Id", "Name"), "Select", new { @onchange= "restaurantChange(this)" })
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-2">
+            Meal Type
+        </div>
+        <div class=" col-md-10">
+           <select name="MealTypeId" id="MealTypeId">
+               <option value=0>Select</option>
+           </select>
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <div class="col-md-2">
+            Select Image
+        </div>
+        <div class=" col-md-10">
+            <input type="file" name="myImage" accept="image/x-png,image/gif,image/jpeg" />
+        </div>
+    </div>
+
+
+    <div>
+        <input type="submit" value="Submit" />
+    </div>
+
+}
+
+
+<script type="text/javascript">
+    function restaurantChange(el) {
+        debugger;
+        let id = el.value; 
+        const url = "/restaurants/GetMealTypesForRestaurant/?restaurantId=" + id;
+        $.ajax({
+            type: "GET",
+            url: url,
+            contentType: "application/json",
+            processData: false,
+            success: function (response) {
+                if (response.success) {
+                    var mt = document.getElementById("MealTypeId")
+                    var length = mt.options.length;
+                    for (i = 1; i < length; i++) {
+                        mt.options[i] = null;
+                    }
+
+                    let data = response.msg;
+                    for (ind in data) {
+                        var opt = document.createElement("option");
+                        opt.value = data[ind].id;
+                        opt.innerHTML = data[ind].name;
+
+                        // then append it to the select element 
+                        mt.appendChild(opt); 
+                    }
+                }
+                else {
+                    alert('an error occured!');
+                }
+            },
+            error: function (er) {
+                alert('an unknown error occured!');
+            }
+        })
+    }
+</script>

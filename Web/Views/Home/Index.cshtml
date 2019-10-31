@@ -1,0 +1,11 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to my Restaurant Manager</h1> 
+</div>
+
+<p>@Html.ActionLink("Add new restaurant", "Create", "Restaurants")</p>
+
+@Html.ActionLink("Add new meal", "Addmeal", "Restaurants")
