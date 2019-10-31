@@ -34,6 +34,8 @@ namespace Api.Controllers
         public IActionResult GetById([FromRoute]int Id)
         {
             var areas = areaService.GetAreaById(Id);
+            if (areas == null)
+                return NotFound();
             return Ok(areas);
         }
 
