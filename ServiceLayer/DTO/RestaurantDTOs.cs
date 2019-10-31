@@ -49,6 +49,17 @@ namespace ServiceLayer.DTO
         public List<ImageResponseDTO> Images { get; set; }
         public List<WorkingHourResponseDTO> WorkingHours { get; set; } 
     }
+    public class RestaurantCategoryUpdateDTO
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+    }
+
+    public class RestaurantCategoryCreateDTO
+    {
+        public string Name { get; set; }
+    }
+
     public class ImageResponseDTO
     {
         public int ID { get; set; }

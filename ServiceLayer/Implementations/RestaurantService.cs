@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ServiceLayer.Implementations
 {
@@ -75,6 +76,48 @@ namespace ServiceLayer.Implementations
         public List<RestaurantCategory> GetRestaurantCategories()
         {
             return uow.RestaurantCategoryRepository.GetAll().ToList();
+        }
+
+        public RestaurantCategory GetRestaurantCategoryById(int resturantId)
+        {
+           return uow.RestaurantCategoryRepository.Find(r => r.Id == resturantId).FirstOrDefault();
+        }
+
+        public Restaurant GetRestaurantById(int restaurantId)
+        {
+            return uow.RestaurantRepository.Get(restaurantId);
+        }
+
+        public Task<RestaurantCategory> UpdateRestaurantCategory(RestaurantCategory restaurantCategory)
+        {
+            if(restaurantCategory == null)
+                throw new Exception("Category cannot be null");
+
+            var restaurantGet = uow.RestaurantCategoryRepository.Get(restaurantCategory.Id);
+            if (restaurantGet == null)
+                throw new Exception("Category Not Found");
+
+            var updatedRestaurantCategory = uow.RestaurantCategoryRepository.UpdateAsync(restaurantCategory, restaurantCategory.Id);
+            uow.Complete();
+            return updatedRestaurantCategory;
+        }
+
+        public RestaurantCategory CreateNewRestaurantCategory(RestaurantCategory restaurantCategory)
+        {
+            if (restaurantCategory == null)
+                throw new Exception("Category cannot be null");
+
+            uow.RestaurantCategoryRepository.Add(restaurantCategory);
+            uow.Complete();
+            return restaurantCategory;
+        }
+
+        public void DeleteRestaurantCategory(RestaurantCategory restaurantCategory)
+        {
+            if (restaurantCategory == null)
+                throw new Exception("Category cannot be null");
+            uow.RestaurantCategoryRepository.Remove(restaurantCategory);
+            uow.Complete();
         }
     }
 }

@@ -45,7 +45,7 @@ namespace ServiceLayer.Implementations
 
             var areaGet = uow.AreaRepository.Get(area.Id);
             if (areaGet == null)
-                throw new Exception("Area cannot be null");
+                throw new Exception("Area Not Found");
 
             var updatedArea = uow.AreaRepository.UpdateAsync(area, area.Id);
             uow.Complete();
