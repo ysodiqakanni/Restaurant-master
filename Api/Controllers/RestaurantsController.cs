@@ -151,7 +151,7 @@ namespace Api.Controllers
         [HttpGet("meal-categories")]
         public IActionResult GetMealCategories()
         {
-            var mealCategories = restaurantService.GetAreas();
+            var mealCategories = mealService.GetAllMealCategories();
             return Ok(mealCategories);
         }
 
