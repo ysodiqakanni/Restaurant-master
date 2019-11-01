@@ -3,6 +3,7 @@ using DomainModel;
 using ServiceLayer.Contracts;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace ServiceLayer.Implementations
@@ -20,6 +21,11 @@ namespace ServiceLayer.Implementations
                 throw new Exception("Meal cannot be null");
             uow.MealRepository.Add(meal);
             uow.Complete();
+        }
+
+        public List<Meal> GetAllMealCategories()
+        {
+            return uow.MealRepository.GetAll().ToList();
         }
     }
 }

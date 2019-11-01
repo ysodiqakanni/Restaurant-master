@@ -99,6 +99,13 @@ namespace Web.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAllRestaurantCategories()
+        {
+            var restaurantCategories = await restaurantApi.GetAllRestaurantCategories();
+            return View(restaurantCategories);
+        }
+
         public async Task<IActionResult> GetMealTypesForRestaurant(int restaurantId)
         {
             if (restaurantId < 1)

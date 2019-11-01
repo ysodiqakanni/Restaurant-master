@@ -8,5 +8,6 @@ namespace ServiceLayer.Contracts
     public interface IMealService
     {
         void AddMeal(Meal meal);
+        List<Meal> GetAllMealCategories();
     }
 }

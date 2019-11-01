@@ -93,5 +93,17 @@ namespace Web.ApiHelpers
             }
         }
 
+        public async Task<List<RestaurantCategoryResponseDTO>> GetAllRestuarantCategories()
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseUrl);
+                HttpResponseMessage msg = await client.GetAsync("restaurants/categories");
+                msg.EnsureSuccessStatusCode();
+                var result = await msg.Content.ReadAsAsync<List<RestaurantCategoryResponseDTO>>();
+                return result;
+            }
+        }
+
     }
 }

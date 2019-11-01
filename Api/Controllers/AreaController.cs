@@ -70,6 +70,7 @@ namespace Api.Controllers
 
             Area area = areaService.GetAreaById(areaDTO.Id);
             area.Name = areaDTO.Name;
+            area.DateUpdated = DateTime.Now;
 
             var response = areaService.UpdateArea(area);
             return Ok(response);
