@@ -114,6 +114,33 @@ namespace Web.Controllers
             return Json(new { success = true, msg = mealTypes });
         }
 
+
+        public IActionResult Categories()
+        {
+            return View();
+        }
+        public IActionResult AddCategory()
+        {
+            return View();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         private void GetRestaurantImages(CreateRestaurantViewModel model, List<ImageViewModel> images, Microsoft.AspNetCore.Http.IFormFileCollection files)
         {
             if (files != null && files.Any())
@@ -127,19 +154,7 @@ namespace Web.Controllers
                     var img = model.Images[i];
                     img.ImageUrl = uri;
                     images.Add(img);
-                }
-                //foreach (var file in files)
-                //{
-                //    // save file and get the uri
-                //    string uri = SaveImageAndGetUri();
-                //    var img = new ImageViewModel
-                //    {
-                //        ImageUrl = uri,
-                //        ImagePriority = new Random().Next(1, 10)
-                //    };
-                //    images.Add(img);
-                //}
-                //model.Images = images;
+                } 
             }
         }
 
