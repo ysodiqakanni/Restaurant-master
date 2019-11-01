@@ -57,8 +57,7 @@ namespace Web.Controllers
             {
                 Name = area.Name,
             };
-
-            ViewBag.Error = TempData["AreaEditError"];
+ 
             return View(editAreaViewModel);
 
         }
@@ -80,8 +79,8 @@ namespace Web.Controllers
                 }
                 catch(Exception ex)
                 {
-                    TempData["AreaEditError"] = "Failed to Edit a Area";
-                    return RedirectToAction("Edit", new { id = model.Id });
+                    ViewBag.Error = "Failed to Edit a Area";
+                    return RedirectToAction("Index");
                 }
             }
             return View(model);
