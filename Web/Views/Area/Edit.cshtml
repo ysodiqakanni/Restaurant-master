@@ -10,7 +10,7 @@
     <div class="form-horizontal">
         <h2 style="color:red;">@ViewBag.Error</h2>
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
+        @Html.HiddenFor(model => model.Id)
         <div class="form-group">
             @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">

@@ -1,11 +1,11 @@
-﻿@model Web.Models.CreateAreaViewModel
+﻿@model  Web.Models.AddRestaurantCategoryViewModel
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "AddRestaurantCategory";
 }
 
-<h1>Create Area</h1>
-
-@using (Html.BeginForm("Create", "Area", FormMethod.Post, new { enctype = "multipart/form-data" }))
+<h1>Add Restaurant Category</h1>
+<h2 style="color:red;">@ViewBag.Error</h2>
+@using (Html.BeginForm("AddRestaurantCategory", "Restaurants", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 
@@ -26,3 +26,4 @@
         <input type="submit" value="Submit" class="btn btn-primary" />
     </div>
 }
+

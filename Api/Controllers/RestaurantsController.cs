@@ -206,8 +206,11 @@ namespace Api.Controllers
 
         [HttpGet]
         [Route("categories/{Id}")]
-        public IActionResult GetRestaurantCategoryById([FromRoute]int Id)
+        public IActionResult GetRestaurantCategoryById([FromRoute]int Id=0)
         {
+            if (Id == 0)
+                return BadRequest("Category is null!");
+
             var categories = restaurantService.GetRestaurantCategoryById(Id);
             if (categories == null)
                 return NotFound();
@@ -247,15 +250,16 @@ namespace Api.Controllers
                 return NotFound();
 
             restaurantCategory.Name = restaurantRequest.Name;
+            restaurantCategory.DateUpdated = DateTime.Now;
 
             var response = restaurantService.UpdateRestaurantCategory(restaurantCategory);
             return Ok(response);
         }
 
         [HttpDelete("categories/delete/{Id}")]
-        public IActionResult DeleteRestaurantCategory(int Id)
+        public IActionResult DeleteRestaurantCategory(int Id=0)
         {
-            if (Id == null)
+            if (Id == 0)
                 return BadRequest("Category is null!");
             RestaurantCategory restaurantCategory = restaurantService.GetRestaurantCategoryById(Id);
             if (restaurantCategory == null)

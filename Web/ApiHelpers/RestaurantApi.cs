@@ -23,6 +23,7 @@ namespace Web.ApiHelpers
                 msg.EnsureSuccessStatusCode();
             }
         }
+    
 
         public async Task<List<RestaurantCategoryResponseDTO>> GetAllRestaurantCategories()
         {
@@ -33,6 +34,40 @@ namespace Web.ApiHelpers
                 msg.EnsureSuccessStatusCode();
                 var result = await msg.Content.ReadAsAsync<List<RestaurantCategoryResponseDTO>>();
                 return result;
+            }
+        }
+
+        public async Task CreateRestaurantCategories(AddRestaurantCategoryViewModel data)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseUrl);
+                var httpContent = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+                HttpResponseMessage msg = await client.PostAsync("restaurants/categories/create", httpContent);
+                msg.EnsureSuccessStatusCode();
+            }
+        }
+
+        public async Task<AreaBasicResponseDTO> GetRestaurantCaregoryById(int categoryId)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseUrl);
+                HttpResponseMessage msg = await client.GetAsync($"restaurants/categories/{categoryId}");
+                msg.EnsureSuccessStatusCode();
+                var result = await msg.Content.ReadAsAsync<AreaBasicResponseDTO>();
+                return result;
+            }
+        }
+
+        public async Task UpdateRestaurantCategory(AreaBasicResponseDTO data)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseUrl);
+                var httpContent = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+                HttpResponseMessage msg = await client.PutAsync($"restaurants/categories/edit/{data.Id}", httpContent);
+                msg.EnsureSuccessStatusCode();
             }
         }
 
@@ -93,17 +128,6 @@ namespace Web.ApiHelpers
             }
         }
 
-        public async Task<List<RestaurantCategoryResponseDTO>> GetAllRestuarantCategories()
-        {
-            using (HttpClient client = new HttpClient())
-            {
-                client.BaseAddress = new Uri(baseUrl);
-                HttpResponseMessage msg = await client.GetAsync("restaurants/categories");
-                msg.EnsureSuccessStatusCode();
-                var result = await msg.Content.ReadAsAsync<List<RestaurantCategoryResponseDTO>>();
-                return result;
-            }
-        }
 
     }
 }

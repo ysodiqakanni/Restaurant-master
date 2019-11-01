@@ -88,18 +88,18 @@ namespace ServiceLayer.Implementations
             return uow.RestaurantRepository.Get(restaurantId);
         }
 
-        public Task<RestaurantCategory> UpdateRestaurantCategory(RestaurantCategory restaurantCategory)
+        public async Task<RestaurantCategory> UpdateRestaurantCategory(RestaurantCategory restaurantCategory)
         {
             if(restaurantCategory == null)
                 throw new Exception("Category cannot be null");
 
-            var restaurantGet = uow.RestaurantCategoryRepository.Get(restaurantCategory.Id);
-            if (restaurantGet == null)
-                throw new Exception("Category Not Found");
+            //var restaurantGet = uow.RestaurantCategoryRepository.Get(restaurantCategory.Id);
+            //if (restaurantGet == null)
+            //    throw new Exception("Category Not Found");
 
-            var updatedRestaurantCategory = uow.RestaurantCategoryRepository.UpdateAsync(restaurantCategory, restaurantCategory.Id);
+            //var updatedRestaurantCategory = uow.RestaurantCategoryRepository.UpdateAsync(restaurantCategory, restaurantCategory.Id);
             uow.Complete();
-            return updatedRestaurantCategory;
+            return restaurantCategory;
         }
 
         public RestaurantCategory CreateNewRestaurantCategory(RestaurantCategory restaurantCategory)
