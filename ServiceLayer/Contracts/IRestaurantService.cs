@@ -19,5 +19,8 @@ namespace ServiceLayer.Contracts
         Task<RestaurantCategory> UpdateRestaurantCategory(RestaurantCategory restaurantCategory);
         RestaurantCategory CreateNewRestaurantCategory(RestaurantCategory restaurantCategory);
         void DeleteRestaurantCategory(RestaurantCategory restaurantCategory);
+        List<RestaurantImage> GetAllImagesByRestaurantId(int restaurantid);
+        Task<Restaurant> UpdateRestaurant(Restaurant restaurant);
+        List<WorkingHour> GetWorkingHoursByRestaurantId(int restaurantid);
     }
 }

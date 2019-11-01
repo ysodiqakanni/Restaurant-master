@@ -99,6 +99,16 @@ namespace Api.Controllers
             return Ok(all);
         }
 
+        [HttpGet]
+        [Route("{Id}")]
+        public IActionResult GetById([FromRoute]int Id)
+        {
+            var restaurant = restaurantService.GetRestaurantById(Id);
+            if (restaurant == null)
+                return NotFound();
+            return Ok(restaurant);
+        }
+
         [HttpPost]
         public IActionResult AddRestaurant([FromBody] RestaurantCreateRequestDTO restaurantRequest)
         {
@@ -144,6 +154,53 @@ namespace Api.Controllers
 
             // commit to db
             var response = restaurantService.CreateNewRestaurant(restaurant);
+
+            return Ok(response);
+        }
+
+        [HttpPut]
+        public IActionResult EditRestaurant([FromBody] RestaurantUpdateRequestDTO restaurantRequest)
+        {
+            if (restaurantRequest == null)
+                return BadRequest("Request is null!");
+
+            if (!ModelState.IsValid)
+                return BadRequest("Data validation errors!");
+
+            Restaurant restaurant = restaurantService.GetRestaurantById(restaurantRequest.Id);
+            restaurant.Name = restaurantRequest.Name;
+            restaurant.PhoneNumber = restaurantRequest.PhoneNumber;
+            restaurant.Latitude = restaurantRequest.Latitude;
+            restaurant.Longitude = restaurantRequest.Longitude;
+            restaurant.Address = restaurantRequest.Address;
+            restaurant.AreaId = restaurantRequest.AreaId;
+            restaurant.DateUpdated = DateTime.Now;
+            restaurant.Description = restaurantRequest.Description;
+            restaurant.Priority = restaurantRequest.Priority;
+            restaurant.RestaurantCategoryId = restaurantRequest.RestaurantCategoryId;
+
+            // save images
+            if (restaurantRequest.Images != null && restaurantRequest.Images.Any())
+            {
+                foreach (var image in restaurantRequest.Images)
+                {
+                    image.DateUpdated = DateTime.Now;
+                }
+                restaurant.RestaurantImages = restaurantRequest.Images;
+            }
+
+            // save the working hours
+            if (restaurantRequest.WorkingHours != null && restaurantRequest.WorkingHours.Any())
+            {
+                foreach (var hour in restaurantRequest.WorkingHours)
+                {
+                    hour.DateUpdated = DateTime.Now;
+                }
+                restaurant.WorkingHours = restaurantRequest.WorkingHours;
+            }
+
+            // commit to db
+            var response = restaurantService.UpdateRestaurant(restaurant);
 
             return Ok(response);
         }
@@ -195,6 +252,34 @@ namespace Api.Controllers
                 return BadRequest("An error occured while saving meal");
             }
            
+        }
+
+        [HttpGet]
+        [Route("image/{Id}")]
+        public IActionResult GetRestaurantImageById([FromRoute]int Id = 0)
+        {
+            if (Id == 0)
+                return BadRequest("Image is null!");
+
+            var images = restaurantService.GetAllImagesByRestaurantId(Id);
+            if (images == null)
+                return NotFound();
+
+            return Ok(images);
+        }
+
+        [HttpGet]
+        [Route("work/{Id}")]
+        public IActionResult GetRestaurantWorkById([FromRoute]int Id = 0)
+        {
+            if (Id == 0)
+                return BadRequest("Image is null!");
+
+            var work = restaurantService.GetWorkingHoursByRestaurantId(Id);
+            if (work == null)
+                return NotFound();
+
+            return Ok(work);
         }
 
         [HttpGet("categories")]

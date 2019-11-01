@@ -31,6 +31,35 @@ namespace ServiceLayer.DTO
         public List<RestaurantImage> Images { get; set; }
         public List<WorkingHour> WorkingHours { get; set; }
     }
+
+    public class RestaurantUpdateRequestDTO
+    {
+        public int Id { get; set; }
+        [Required]
+        public string Name { get; set; }
+        [Required]
+        [Display(Name = "Phone Number")]
+        public string PhoneNumber { get; set; }
+        [Required]
+        public string Address { get; set; }
+        [Required]
+        public Decimal Longitude { get; set; }
+        [Required]
+        public Decimal Latitude { get; set; }
+        [Required]
+        public string Description { get; set; }
+        public int Priority { get; set; }
+
+
+        [Required]
+        public int RestaurantCategoryId { get; set; }
+        [Required]
+        public int AreaId { get; set; }
+
+        public List<RestaurantImage> Images { get; set; }
+        public List<WorkingHour> WorkingHours { get; set; }
+    }
+
     public class RestaurantResponseDTO
     {
         public int ID { get; set; }

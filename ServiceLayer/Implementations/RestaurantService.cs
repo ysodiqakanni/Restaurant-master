@@ -47,6 +47,18 @@ namespace ServiceLayer.Implementations
             return all;
         }
 
+        public List<RestaurantImage> GetAllImagesByRestaurantId(int restaurantid)
+        {
+            return uow.RestaurantImageRepository.QueryAll()
+                .Where(x => x.Restaurant.Id == restaurantid).ToList();
+        }
+
+        public List<WorkingHour> GetWorkingHoursByRestaurantId(int restaurantid)
+        {
+            return uow.WorkingHourRepository.QueryAll()
+                .Where(x => x.Id == restaurantid).ToList();
+        }
+
         public List<MealType> GetAllMealTypesByRestaurantId(int restaurantid)
         {
             return uow.MealTypeRepository.QueryAll()
@@ -85,7 +97,17 @@ namespace ServiceLayer.Implementations
 
         public Restaurant GetRestaurantById(int restaurantId)
         {
-            return uow.RestaurantRepository.Get(restaurantId);
+            return uow.RestaurantRepository.GetAllIncluding().Where(r => r.Id == restaurantId).FirstOrDefault();
+        }
+
+        public async Task<Restaurant> UpdateRestaurant(Restaurant restaurant)
+        {
+            if (restaurant == null)
+                throw new Exception("Category cannot be null");
+
+
+            uow.Complete();
+            return restaurant;
         }
 
         public async Task<RestaurantCategory> UpdateRestaurantCategory(RestaurantCategory restaurantCategory)
@@ -93,11 +115,7 @@ namespace ServiceLayer.Implementations
             if(restaurantCategory == null)
                 throw new Exception("Category cannot be null");
 
-            //var restaurantGet = uow.RestaurantCategoryRepository.Get(restaurantCategory.Id);
-            //if (restaurantGet == null)
-            //    throw new Exception("Category Not Found");
-
-            //var updatedRestaurantCategory = uow.RestaurantCategoryRepository.UpdateAsync(restaurantCategory, restaurantCategory.Id);
+            
             uow.Complete();
             return restaurantCategory;
         }

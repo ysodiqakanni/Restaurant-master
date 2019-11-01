@@ -13,6 +13,8 @@ namespace Data.UnitOfWork
         IMealRepository MealRepository { get; set; }
         IRestaurantCategoryRepository RestaurantCategoryRepository { get; set; }
         IAreaRepository AreaRepository { get; set; }
+        IRestaurantImageRepository RestaurantImageRepository { get; set; }
+        IWorkingHourRepository WorkingHourRepository { get; set; }
 
         int Complete();
     }

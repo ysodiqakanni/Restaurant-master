@@ -23,6 +23,12 @@ namespace Web.Controllers
             return View();
         }
 
+        public async Task<IActionResult> GetAll()
+        {
+            var restaurant = await restaurantApi.GetAllRestaurants();
+            return View(restaurant.ToList());
+        }
+
         public async Task<IActionResult> Create()
         {
             // get all areas
@@ -64,6 +70,8 @@ namespace Web.Controllers
             ViewBag.AreaId = areas;
             return View(model);
         }
+
+
 
         public async Task<IActionResult> AddMeal()
         {

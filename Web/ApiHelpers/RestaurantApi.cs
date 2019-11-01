@@ -94,6 +94,43 @@ namespace Web.ApiHelpers
                 return result;
             }
         }
+
+        public async Task<RestaurantBasicResponseDTO> GetRestaurantById(int restaurantId)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseUrl);
+                HttpResponseMessage msg = await client.GetAsync($"restaurants/{restaurantId}");
+                msg.EnsureSuccessStatusCode();
+                var result = await msg.Content.ReadAsAsync<RestaurantBasicResponseDTO>();
+                return result;
+            }
+        }
+
+        public async Task<RestaurantGetResponseDTO> GetRestaurantByrestaurantId(int restaurantId)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseUrl);
+                HttpResponseMessage msg = await client.GetAsync($"restaurants/{restaurantId}");
+                msg.EnsureSuccessStatusCode();
+                var result = await msg.Content.ReadAsAsync<RestaurantGetResponseDTO>();
+                return result;
+            }
+        }
+
+        public async Task<List<MealTypeResponseDTO>> GetMealTypesForRestaurant(int restaurantId)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseUrl);
+                HttpResponseMessage msg = await client.GetAsync($"restaurants/meal-types/{restaurantId}");
+                msg.EnsureSuccessStatusCode();
+                var result = await msg.Content.ReadAsAsync<List<MealTypeResponseDTO>>();
+                return result;
+            }
+        }
+
         public async Task<List<MealCategoryResponseDTO>> GetAllMealCategories()
         {
             using (HttpClient client = new HttpClient())
@@ -105,14 +142,14 @@ namespace Web.ApiHelpers
                 return result;
             }
         }
-        public async Task<List<MealTypeResponseDTO>> GetMealTypesForRestaurant(int restaurantId)
+        public async Task<List<ImageResponseDTO>> GetImageForRestaurant(int restaurantId)
         {
             using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = new Uri(baseUrl);
-                HttpResponseMessage msg = await client.GetAsync($"restaurants/meal-types/{restaurantId}");
+                HttpResponseMessage msg = await client.GetAsync($"restaurants/image/{restaurantId}");
                 msg.EnsureSuccessStatusCode();
-                var result = await msg.Content.ReadAsAsync<List<MealTypeResponseDTO>>();
+                var result = await msg.Content.ReadAsAsync<List<ImageResponseDTO>>();
                 return result;
             }
         }
