@@ -80,7 +80,7 @@ namespace Web.Controllers
                 catch(Exception ex)
                 {
                     ViewBag.Error = "Failed to Edit a Area";
-                    return RedirectToAction("Index");
+                    return View(model);
                 }
             }
             return View(model);
