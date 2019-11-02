@@ -73,6 +73,9 @@ namespace ServiceLayer.DTO
         public string Area { get; set; }
         public string Category { get; set; }
 
+        public int AreaId { get; set; }
+        public int RestaurantCategoryId { get; set; }
+
         public DateTime DateUpdated { get; set; }
         public DateTime DateCreated { get; set; }
         public List<ImageResponseDTO> Images { get; set; }

@@ -20,7 +20,7 @@ namespace ServiceLayer.Contracts
         RestaurantCategory CreateNewRestaurantCategory(RestaurantCategory restaurantCategory);
         void DeleteRestaurantCategory(RestaurantCategory restaurantCategory);
         List<RestaurantImage> GetAllImagesByRestaurantId(int restaurantid);
-        Task<Restaurant> UpdateRestaurant(Restaurant restaurant);
+        Task<Restaurant> UpdateRestaurant(Restaurant restaurant, List<RestaurantImage> images, List<WorkingHour> hours);
         List<WorkingHour> GetWorkingHoursByRestaurantId(int restaurantid);
     }
 }

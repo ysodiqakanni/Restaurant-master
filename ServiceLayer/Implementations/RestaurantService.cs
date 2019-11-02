@@ -101,13 +101,17 @@ namespace ServiceLayer.Implementations
             return GetAllIncluding().Where(r => r.Id == restaurantId).FirstOrDefault();
         }
 
-        public async Task<Restaurant> UpdateRestaurant(Restaurant restaurant)
+        public async Task<Restaurant> UpdateRestaurant(Restaurant restaurant, List<RestaurantImage> images, List<WorkingHour> hours)
         {
             if (restaurant == null)
                 throw new Exception("Restaurant cannot be null");
 
             // delete existing restaurant images and working hours
+            uow.RestaurantImageRepository.RemoveRange(restaurant.RestaurantImages);
+            uow.WorkingHourRepository.RemoveRange(restaurant.WorkingHours);
 
+            restaurant.RestaurantImages = images;
+            restaurant.WorkingHours = hours;
 
 
             uow.Complete();

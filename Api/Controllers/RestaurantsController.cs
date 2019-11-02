@@ -129,27 +129,29 @@ namespace Api.Controllers
             restaurant.AreaId = restaurantRequest.AreaId;
 
             // save images
+            var images = new List<RestaurantImage>();
             if (restaurantRequest.Images != null && restaurantRequest.Images.Any())
             {
                 foreach (var image in restaurantRequest.Images)
                 {
                     image.DateUpdated = DateTime.Now;
                 }
-                restaurant.RestaurantImages = restaurantRequest.Images;
+                images = restaurantRequest.Images;
             }
 
             // save the working hours
+            var hours = new List<WorkingHour>();
             if (restaurantRequest.WorkingHours != null && restaurantRequest.WorkingHours.Any())
             {
                 foreach (var hour in restaurantRequest.WorkingHours)
                 {
                     hour.DateUpdated = DateTime.Now;
                 }
-                restaurant.WorkingHours = restaurantRequest.WorkingHours;
+                hours = restaurantRequest.WorkingHours;
             }
 
             // commit to db
-            var response = restaurantService.UpdateRestaurant(restaurant);
+            var response = restaurantService.UpdateRestaurant(restaurant, images, hours);
 
             return Ok(response);
         }
@@ -326,7 +328,9 @@ namespace Api.Controllers
                 DateCreated = rest.DateCreated,
                 DateUpdated = rest.DateUpdated,
                 Area = rest.Area?.Name,
-                Category = rest.RestaurantCategory?.Name
+                Category = rest.RestaurantCategory?.Name,
+                AreaId = rest.AreaId.Value,
+                RestaurantCategoryId = rest.RestaurantCategoryId.Value
             };
 
             // get images

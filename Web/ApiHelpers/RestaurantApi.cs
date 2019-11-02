@@ -23,7 +23,17 @@ namespace Web.ApiHelpers
                 msg.EnsureSuccessStatusCode();
             }
         }
-    
+        public async Task UpdateRestaurant(CreateRestaurantViewModel data)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseUrl);
+                var httpContent = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+                HttpResponseMessage msg = await client.PutAsync("restaurants", httpContent);
+                msg.EnsureSuccessStatusCode();
+            }
+        }
+
 
         public async Task<List<RestaurantCategoryResponseDTO>> GetAllRestaurantCategories()
         {
@@ -107,14 +117,14 @@ namespace Web.ApiHelpers
             }
         }
 
-        public async Task<RestaurantGetResponseDTO> GetRestaurantByrestaurantId(int restaurantId)
+        public async Task<CreateRestaurantViewModel> GetRestaurantByrestaurantId(int restaurantId)
         {
             using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = new Uri(baseUrl);
                 HttpResponseMessage msg = await client.GetAsync($"restaurants/{restaurantId}");
                 msg.EnsureSuccessStatusCode();
-                var result = await msg.Content.ReadAsAsync<RestaurantGetResponseDTO>();
+                var result = await msg.Content.ReadAsAsync<CreateRestaurantViewModel>();
                 return result;
             }
         }
