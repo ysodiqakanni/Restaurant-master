@@ -123,13 +123,16 @@ namespace Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var file = Request.Form.Files[0];
-                if (file != null && file.Length > 0)
+                if (Request.Form.Files.Any())
                 {
-                    string uri = SaveMealImageAndGetUri(file);
-                    model.ImageUrl = uri;
+                    var file = Request.Form.Files[0];
+                    if (file != null && file.Length > 0)
+                    {
+                        string uri = SaveMealImageAndGetUri(file);
+                        model.ImageUrl = uri;
+                    }
                 }
-
+              
                 await restaurantApi.AddnewMeal(model);
                 return RedirectToAction("Success");
             }

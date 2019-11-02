@@ -159,9 +159,9 @@ namespace Api.Controllers
         }
 
         [HttpGet("meal-categories")]
-        public IActionResult GetMealCategories()
+        public async Task<IActionResult> GetMealCategories()
         {
-            var mealCategories = mealCategoryService.GetAllMealCategories();
+            var mealCategories = await mealCategoryService.GetAllMealCategories();
             return Ok(mealCategories);
         }
 
