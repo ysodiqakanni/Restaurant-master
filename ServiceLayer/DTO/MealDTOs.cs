@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DomainModel;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -27,10 +28,12 @@ namespace ServiceLayer.DTO
         public int MealCategoryId { get; set; }
         [Required]
         public int MealTypeId { get; set; }
+
+        public List<MealContent> MealContents { get; set; }
     }
     public class MealCategoryCreateRequestDTO
     {
         public string Name { get; set; }
         public int Priority { get; set; }
-    }
+    } 
 }

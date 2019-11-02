@@ -48,6 +48,10 @@ namespace Api.Controllers
                     RestaurantId = mealRequest.RestaurantId,
                     MealTypeId = mealRequest.MealTypeId
                 };
+                if(mealRequest.MealContents != null && mealRequest.MealContents.Any())
+                {
+                    meal.MealContents = mealRequest.MealContents;
+                }
                 mealService.AddMeal(meal);
                 return Ok("Meal added!");
             }

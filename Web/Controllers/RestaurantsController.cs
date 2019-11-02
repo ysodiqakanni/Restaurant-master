@@ -125,11 +125,19 @@ namespace Web.Controllers
             {
                 if (Request.Form.Files.Any())
                 {
-                    var file = Request.Form.Files[0];
+                    var file = model.MealImage;
                     if (file != null && file.Length > 0)
                     {
                         string uri = SaveMealImageAndGetUri(file);
                         model.ImageUrl = uri;
+                    }
+                }
+                // meal contents images
+                if(model.MealContents != null && model.MealContents.Any())
+                {
+                    foreach (var content in model.MealContents)
+                    {
+                        content.ImageUrl = SaveMealImageAndGetUri(model.MealImage);
                     }
                 }
               

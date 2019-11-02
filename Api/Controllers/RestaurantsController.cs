@@ -197,6 +197,15 @@ namespace Api.Controllers
                     RestaurantId = mealRequest.RestaurantId,
                     MealTypeId = mealRequest.MealTypeId
                 };
+                if(mealRequest.MealContents != null && mealRequest.MealContents.Any())
+                {
+                    foreach (var content in mealRequest.MealContents)
+                    {
+                        content.DateCreated = DateTime.Now;
+                        content.DateUpdated = DateTime.Now;
+                    }
+                    meal.MealContents = mealRequest.MealContents;
+                }
                 mealService.AddMeal(meal);
                 return Ok("Meal added!");
             }
