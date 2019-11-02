@@ -24,13 +24,7 @@ namespace Web.Controllers
         {
             return View();
         }
-
-        //public async Task<IActionResult> GetAll()
-        //{
-        //    var restaurant = await restaurantApi.GetAllRestaurants();
-        //    return View(restaurant);
-        //}
-
+         
         public async Task<IActionResult> Create()
         {
             // get all areas
@@ -54,12 +48,7 @@ namespace Web.Controllers
                 var images = new List<ImageViewModel>();
                 var files = Request.Form.Files;
                 GetRestaurantImages(model, images, files);
-
-                // get the working hours
-                //var workingHours = new List<WorkingHourViewModel>();
-                //GetWorkingHours(model, workingHours);
-                //model.WorkingHours = workingHours;
-
+                 
                 // save
                 await restaurantApi.CreateRestaurant(model);
                 return RedirectToAction("Success");
@@ -289,89 +278,6 @@ namespace Web.Controllers
         {
             return "/path/MealImages/" + formFile.FileName;
         }
-
-        //private string SaveImageAndGetUri()
-        //{
-        //    return "/path/dummyuri";
-        //}
-
-        //private static void GetWorkingHours(CreateRestaurantViewModel model, List<WorkingHourViewModel> workingHours)
-        //{
-        //    if (!String.IsNullOrEmpty(model.MondayFromHour))
-        //    {
-        //        var wHour = new WorkingHourViewModel
-        //        {
-        //            Day = "Monday",
-        //            FromTime = $"{model.MondayFromHour}:{(String.IsNullOrEmpty(model.MondayFromMinute) ? "00" : model.MondayFromMinute)}",
-        //            ToTime = $"{model.MondayToHour}:{(String.IsNullOrEmpty(model.MondayToMinute) ? "00" : model.MondayToMinute)}"
-        //        };
-        //        workingHours.Add(wHour);
-        //    }
-        //    if (!String.IsNullOrEmpty(model.TuesdayFromHour))
-        //    {
-        //        var wHour = new WorkingHourViewModel
-        //        {
-        //            Day = "Tuesday",
-        //            FromTime = $"{model.TuesdayFromHour}:{(String.IsNullOrEmpty(model.TuesdayFromMinute) ? "00" : model.TuesdayFromMinute)}",
-        //            ToTime = $"{model.TuesdayToHour}:{(String.IsNullOrEmpty(model.TuesdayToMinute) ? "00" : model.TuesdayToMinute)}"
-        //        };
-        //        workingHours.Add(wHour);
-        //    }
-
-        //    if (!String.IsNullOrEmpty(model.WednesdayFromHour))
-        //    {
-        //        var wHour = new WorkingHourViewModel
-        //        {
-        //            Day = "Wednesday",
-        //            FromTime = $"{model.WednesdayFromHour}:{(String.IsNullOrEmpty(model.WednesdayFromMinute) ? "00" : model.WednesdayFromMinute)}",
-        //            ToTime = $"{model.WednesdayToHour}:{(String.IsNullOrEmpty(model.WednesdayToMinute) ? "00" : model.WednesdayToMinute)}"
-        //        };
-        //        workingHours.Add(wHour);
-        //    }
-
-        //    if (!String.IsNullOrEmpty(model.ThursdayFromHour))
-        //    {
-        //        var wHour = new WorkingHourViewModel
-        //        {
-        //            Day = "Thursday",
-        //            FromTime = $"{model.ThursdayFromHour}:{(String.IsNullOrEmpty(model.ThursdayFromMinute) ? "00" : model.ThursdayFromMinute)}",
-        //            ToTime = $"{model.ThursdayToHour}:{(String.IsNullOrEmpty(model.ThursdayToMinute) ? "00" : model.ThursdayToMinute)}"
-        //        };
-        //        workingHours.Add(wHour);
-        //    }
-
-        //    if (!String.IsNullOrEmpty(model.FridayFromHour))
-        //    {
-        //        var wHour = new WorkingHourViewModel
-        //        {
-        //            Day = "Friday",
-        //            FromTime = $"{model.FridayFromHour}:{(String.IsNullOrEmpty(model.FridayFromMinute) ? "00" : model.FridayFromMinute)}",
-        //            ToTime = $"{model.FridayToHour}:{(String.IsNullOrEmpty(model.FridayToMinute) ? "00" : model.FridayToMinute)}"
-        //        };
-        //        workingHours.Add(wHour);
-        //    }
-
-        //    if (!String.IsNullOrEmpty(model.SaturdayFromHour))
-        //    {
-        //        var wHour = new WorkingHourViewModel
-        //        {
-        //            Day = "Saturday",
-        //            FromTime = $"{model.SaturdayFromHour}:{(String.IsNullOrEmpty(model.SaturdayFromMinute) ? "00" : model.SaturdayFromMinute)}",
-        //            ToTime = $"{model.SaturdayToHour}:{(String.IsNullOrEmpty(model.SaturdayToMinute) ? "00" : model.SaturdayToMinute)}"
-        //        };
-        //        workingHours.Add(wHour);
-        //    }
-
-        //    if (!String.IsNullOrEmpty(model.SaturdayFromHour))
-        //    {
-        //        var wHour = new WorkingHourViewModel
-        //        {
-        //            Day = "Saturday",
-        //            FromTime = $"{model.SaturdayFromHour}:{(String.IsNullOrEmpty(model.SaturdayFromMinute) ? "00" : model.SaturdayFromMinute)}",
-        //            ToTime = $"{model.SaturdayToHour}:{(String.IsNullOrEmpty(model.SaturdayToMinute) ? "00" : model.SaturdayToMinute)}"
-        //        };
-        //        workingHours.Add(wHour);
-        //    }
-        //}
+         
     }
 }

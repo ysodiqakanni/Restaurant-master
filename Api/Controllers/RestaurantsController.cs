@@ -73,7 +73,9 @@ namespace Api.Controllers
                 PhoneNumber = restaurantRequest.PhoneNumber,
                 Priority = restaurantRequest.Priority,
                 RestaurantCategoryId = restaurantRequest.RestaurantCategoryId,
-                AreaId = restaurantRequest.AreaId
+                AreaId = restaurantRequest.AreaId,
+                Description = restaurantRequest.Description,
+               
             };
 
             // save images
