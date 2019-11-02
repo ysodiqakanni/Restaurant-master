@@ -17,12 +17,14 @@ namespace Api.Controllers
     {
         IRestaurantService restaurantService;
         IMealService mealService;
+        IMealCategoryService mealCategoryService;
         private readonly IMapper mapper;
-        public RestaurantsController(IRestaurantService _restaurantService, IMapper _mapper, IMealService _mealService)
+        public RestaurantsController(IRestaurantService _restaurantService, IMapper _mapper, IMealService _mealService, IMealCategoryService _mealCategoryService)
         {
             restaurantService = _restaurantService;
             mapper = _mapper;
             mealService = _mealService;
+            mealCategoryService = _mealCategoryService;
         }
 
         [HttpGet]
@@ -32,64 +34,8 @@ namespace Api.Controllers
             var response = new List<RestaurantResponseDTO>();
             if (restaurants == null || !restaurants.Any())
                 return Ok(response);
-
-            foreach (var rest in restaurants)
-            {
-                var resp = new RestaurantResponseDTO
-                {
-                    ID = rest.Id,
-                    Name = rest.Name,
-                    Address = rest.Address,
-                    Description = rest.Description,
-                    Latitude = rest.Latitude,
-                    Longitude = rest.Longitude,
-                    PhoneNumber = rest.PhoneNumber,
-                    Priority = rest.Priority,
-                    DateCreated = rest.DateCreated,
-                    DateUpdated = rest.DateUpdated,
-                    Area = rest.Area?.Name,
-                    Category = rest.RestaurantCategory?.Name
-                };
-
-                // get images
-                if(rest.RestaurantImages != null && rest.RestaurantImages.Any())
-                {
-                    var images = new List<ImageResponseDTO>();
-                    foreach (var img in rest.RestaurantImages)
-                    {
-                        images.Add(
-                            new ImageResponseDTO
-                            {
-                                ID = img.Id,
-                                ImagePriority = img.ImagePriority,
-                                ImageUrl = img.ImageUrl
-                            });
-                    }
-                    resp.Images = images;
-                }
-
-                // get working hours
-                if (rest.WorkingHours != null && rest.WorkingHours.Any())
-                {
-                    var workingImages = new List<WorkingHourResponseDTO>();
-                    foreach (var hour in rest.WorkingHours)
-                    {
-                        workingImages.Add(
-                            new WorkingHourResponseDTO
-                            {
-                                ID = hour.Id,
-                                Day = hour.Day,
-                                FromTime = hour.FromTime,
-                                ToTime = hour.ToTime
-                            });
-                    }
-                    resp.WorkingHours = workingImages;
-                }
-
-                response.Add(resp);
-            }
-            // var restaurantResponse = mapper.Map<List<RestaurantResponseDTO>>(restaurants);
-            return Ok(response);
+            response = GetRestaurantResponse(restaurants);
+            return Ok(response); 
         }
 
         [HttpGet("basic-details")]
@@ -106,7 +52,7 @@ namespace Api.Controllers
             var restaurant = restaurantService.GetRestaurantById(Id);
             if (restaurant == null)
                 return NotFound();
-            return Ok(restaurant);
+            return Ok(GetRestaurantResponse(restaurant));
         }
 
         [HttpPost]
@@ -168,16 +114,19 @@ namespace Api.Controllers
                 return BadRequest("Data validation errors!");
 
             Restaurant restaurant = restaurantService.GetRestaurantById(restaurantRequest.Id);
+            if(restaurant == null)
+                return BadRequest("Record not found in our database");
+
             restaurant.Name = restaurantRequest.Name;
             restaurant.PhoneNumber = restaurantRequest.PhoneNumber;
             restaurant.Latitude = restaurantRequest.Latitude;
             restaurant.Longitude = restaurantRequest.Longitude;
-            restaurant.Address = restaurantRequest.Address;
-            restaurant.AreaId = restaurantRequest.AreaId;
+            restaurant.Address = restaurantRequest.Address; 
             restaurant.DateUpdated = DateTime.Now;
             restaurant.Description = restaurantRequest.Description;
             restaurant.Priority = restaurantRequest.Priority;
             restaurant.RestaurantCategoryId = restaurantRequest.RestaurantCategoryId;
+            restaurant.AreaId = restaurantRequest.AreaId;
 
             // save images
             if (restaurantRequest.Images != null && restaurantRequest.Images.Any())
@@ -208,7 +157,7 @@ namespace Api.Controllers
         [HttpGet("meal-categories")]
         public IActionResult GetMealCategories()
         {
-            var mealCategories = mealService.GetAllMealCategories();
+            var mealCategories = mealCategoryService.GetAllMealCategories();
             return Ok(mealCategories);
         }
 
@@ -360,5 +309,72 @@ namespace Api.Controllers
             var areas = restaurantService.GetAreas();
             return Ok(areas);
         }
+
+        #region Private Methods
+        private RestaurantResponseDTO GetRestaurantResponse(Restaurant rest)
+        {
+            var resp = new RestaurantResponseDTO
+            {
+                ID = rest.Id,
+                Name = rest.Name,
+                Address = rest.Address,
+                Description = rest.Description,
+                Latitude = rest.Latitude,
+                Longitude = rest.Longitude,
+                PhoneNumber = rest.PhoneNumber,
+                Priority = rest.Priority,
+                DateCreated = rest.DateCreated,
+                DateUpdated = rest.DateUpdated,
+                Area = rest.Area?.Name,
+                Category = rest.RestaurantCategory?.Name
+            };
+
+            // get images
+            if (rest.RestaurantImages != null && rest.RestaurantImages.Any())
+            {
+                var images = new List<ImageResponseDTO>();
+                foreach (var img in rest.RestaurantImages)
+                {
+                    images.Add(
+                        new ImageResponseDTO
+                        {
+                            ID = img.Id,
+                            ImagePriority = img.ImagePriority,
+                            ImageUrl = img.ImageUrl
+                        });
+                }
+                resp.Images = images;
+            }
+
+            // get working hours
+            if (rest.WorkingHours != null && rest.WorkingHours.Any())
+            {
+                var workingImages = new List<WorkingHourResponseDTO>();
+                foreach (var hour in rest.WorkingHours)
+                {
+                    workingImages.Add(
+                        new WorkingHourResponseDTO
+                        {
+                            ID = hour.Id,
+                            Day = hour.Day,
+                            FromTime = hour.FromTime,
+                            ToTime = hour.ToTime
+                        });
+                }
+                resp.WorkingHours = workingImages;
+            }
+            return resp;
+        }
+
+        private List<RestaurantResponseDTO> GetRestaurantResponse(List<Restaurant> restaurants)
+        {
+            var result = new List<RestaurantResponseDTO>();
+            foreach (var item in restaurants)
+            {
+                result.Add(GetRestaurantResponse(item));
+            }
+            return result;
+        }
+        #endregion
     }
 }

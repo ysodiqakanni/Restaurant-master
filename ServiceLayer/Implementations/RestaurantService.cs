@@ -97,13 +97,17 @@ namespace ServiceLayer.Implementations
 
         public Restaurant GetRestaurantById(int restaurantId)
         {
-            return uow.RestaurantRepository.GetAllIncluding().Where(r => r.Id == restaurantId).FirstOrDefault();
+            // return uow.RestaurantRepository.GetAllIncluding(r => r.RestaurantImages).Where(r => r.Id == restaurantId).FirstOrDefault();
+            return GetAllIncluding().Where(r => r.Id == restaurantId).FirstOrDefault();
         }
 
         public async Task<Restaurant> UpdateRestaurant(Restaurant restaurant)
         {
             if (restaurant == null)
-                throw new Exception("Category cannot be null");
+                throw new Exception("Restaurant cannot be null");
+
+            // delete existing restaurant images and working hours
+
 
 
             uow.Complete();

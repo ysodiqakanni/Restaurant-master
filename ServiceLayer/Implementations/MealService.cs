@@ -23,7 +23,15 @@ namespace ServiceLayer.Implementations
             uow.Complete();
         }
 
-        public List<Meal> GetAllMealCategories()
+        public Meal EditMeal(Meal meal)
+        {
+            if (meal == null)
+                throw new ArgumentNullException("Meal cannot be null");
+            uow.Complete();
+            return meal;
+        }
+
+        public List<Meal> GetMeals()
         {
             return uow.MealRepository.GetAll().ToList();
         }

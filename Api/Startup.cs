@@ -44,6 +44,8 @@ namespace RestaurantProject
             services.AddTransient<IRestaurantService, RestaurantService>();
             services.AddTransient<IAreaService, AreaService>();
             services.AddTransient<IMealService, MealService>();
+            services.AddTransient<IMealCategoryService, MealCategoryService>();
+            services.AddTransient<IMealTypeService, MealTypeService>();
 
             services.AddTransient<IRestaurantRepository, RestaurantRepository>();
             services.AddTransient<IAreaRepository, AreaRepository>();
