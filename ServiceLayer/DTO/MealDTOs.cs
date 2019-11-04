@@ -8,6 +8,7 @@ namespace ServiceLayer.DTO
 {
     public class MealCreateRequestDTO
     {
+        public int Id { get; set; }
         [Required]
         [Display(Name = "Meal Name")]
         public string Name { get; set; }
@@ -36,4 +37,16 @@ namespace ServiceLayer.DTO
         public string Name { get; set; }
         public int Priority { get; set; }
     } 
+    public class MealResponseDTO
+    {
+        public string Name { get; set; }
+        public string ImageUrl { get; set; }
+        public string Description { get; set; }
+        public decimal Price { get; set; }
+        public int LocalPriority { get; set; }
+        public int GeneralPriority { get; set; }
+
+
+        public virtual List<MealContent> MealContents { get; set; }
+    }
 }

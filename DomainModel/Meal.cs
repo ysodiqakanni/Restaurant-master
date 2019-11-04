@@ -12,6 +12,8 @@ namespace DomainModel
         public int LocalPriority { get; set; }
         public int GeneralPriority { get; set; }
 
+
+
         [ForeignKey("Restaurant")]
         public int? RestaurantId { get; set; }
         public virtual Restaurant Restaurant { get; set; }

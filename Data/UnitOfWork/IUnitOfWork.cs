@@ -11,6 +11,7 @@ namespace Data.UnitOfWork
         IMealTypeRepository MealTypeRepository { get; set; }
         IMealCategoryRepository MealCategoryRepository { get; set; }
         IMealRepository MealRepository { get; set; }
+        IMealContentRepository MealContentRepository { get; set; }
         IRestaurantCategoryRepository RestaurantCategoryRepository { get; set; }
         IAreaRepository AreaRepository { get; set; }
         IRestaurantImageRepository RestaurantImageRepository { get; set; }

@@ -20,6 +20,7 @@ namespace Data.UnitOfWork
             AreaRepository = new AreaRepository(context);
             RestaurantImageRepository = new RestaurantImageRepository(context);
             WorkingHourRepository = new WorkingHourRepository(context);
+            MealContentRepository = new MealContentRepository(context);
         }
 
 
@@ -27,6 +28,7 @@ namespace Data.UnitOfWork
         public IMealCategoryRepository MealCategoryRepository { get; set; }
         public IMealTypeRepository MealTypeRepository { get; set; }
         public IMealRepository MealRepository { get; set; }
+        public IMealContentRepository MealContentRepository { get; set; }
         public IRestaurantCategoryRepository RestaurantCategoryRepository { get; set; }
         public IAreaRepository AreaRepository { get; set; }
 

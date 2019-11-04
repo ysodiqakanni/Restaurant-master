@@ -137,7 +137,7 @@ namespace Web.Controllers
                 {
                     foreach (var content in model.MealContents)
                     {
-                        content.ImageUrl = SaveMealImageAndGetUri(model.MealImage);
+                        content.ImageUrl = SaveMealContentImageAndGetUri(model.MealImage);
                     }
                 }
               
@@ -289,6 +289,9 @@ namespace Web.Controllers
         {
             return "/path/MealImages/" + formFile.FileName;
         }
-         
+        private string SaveMealContentImageAndGetUri(IFormFile formFile)
+        {
+            return "/path/MealContentImages/" + formFile.FileName;
+        }
     }
 }

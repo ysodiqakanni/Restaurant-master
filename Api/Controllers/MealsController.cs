@@ -10,7 +10,7 @@ using ServiceLayer.DTO;
 
 namespace Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class MealsController : ControllerBase
     {
@@ -23,7 +23,47 @@ namespace Api.Controllers
             restaurantService = _restaurantService;
             mealCategoryService = _mealCategoryService;
         }
-        
+
+        [HttpGet] 
+        public IActionResult GetAll()
+        {
+            var data = mealService.GetMeals().Select(x => new
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Price = x.Price
+            });
+
+            return Ok(data);
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public IActionResult GetById([FromRoute]int id)
+        {
+            var data = mealService.GetMealById(id);
+            var response = new MealResponseDTO
+            {
+                Description = data.Description,
+                LocalPriority = data.LocalPriority,
+                GeneralPriority = data.GeneralPriority,
+                Name = data.Name,
+                Price = data.Price,
+                ImageUrl = data.ImageUrl
+            };
+            if(data.MealContents != null && data.MealContents.Any())
+            {
+                var x = new List<MealContent>();
+                foreach (var item in data.MealContents)
+                {
+                    x.Add(item);
+                }
+                response.MealContents = x;
+            }
+            return Ok(data);
+        }
+
+
         [HttpPost]
         [Route("")]
         public IActionResult AddMeal([FromBody] MealCreateRequestDTO mealRequest)
@@ -62,12 +102,62 @@ namespace Api.Controllers
 
         }
 
+        [HttpPut]
+        [Route("")]
+        public IActionResult UpdateMeal([FromBody] MealCreateRequestDTO mealRequest)
+        {
+            if (mealRequest == null)
+                return BadRequest("Request is null!");
+
+            if (!ModelState.IsValid)
+                return BadRequest("Data validation errors!");
+
+            try
+            {
+                var meal = mealService.GetMealById(mealRequest.Id);
+                if (meal == null)
+                    return NotFound();
+
+                meal.Name = mealRequest.Name;
+                meal.Description = mealRequest.Description;
+                meal.Price = mealRequest.Price;
+                meal.GeneralPriority = mealRequest.GeneralPriority;
+                meal.LocalPriority = mealRequest.LocalPriority;
+                meal.ImageUrl = mealRequest.ImageUrl;
+                meal.MealCategoryId = mealRequest.MealCategoryId;
+                meal.RestaurantId = mealRequest.RestaurantId;
+                meal.MealTypeId = meal.MealTypeId;
+
+
+                List<MealContent> mealContents = null;
+                if (mealRequest.MealContents != null && mealRequest.MealContents.Any())
+                {
+                    mealContents = mealRequest.MealContents;
+                }
+                mealService.EditMeal(meal, mealContents);
+                return Ok("Meal updated!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("An error occured while saving meal");
+            }
+
+        }
+
         // meal categories
         [HttpGet("categories")]
-        public IActionResult GetMealCategories()
+        public async Task<IActionResult> GetMealCategories()
         {
-            var mealCategories = mealCategoryService.GetAllMealCategories();
+            var mealCategories = await mealCategoryService.GetAllMealCategories();
             return Ok(mealCategories);
+        }
+
+        [HttpGet]
+        [Route("category/{id}")]
+        public async Task<IActionResult> GetMealCategoryById([FromRoute] int id)
+        {
+            var category = await mealCategoryService.GetMealCategoryById(id);
+            return Ok(category);
         }
 
         [HttpPost]

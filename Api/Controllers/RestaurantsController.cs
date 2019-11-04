@@ -216,33 +216,33 @@ namespace Api.Controllers
            
         }
 
-        [HttpGet]
-        [Route("image/{Id}")]
-        public IActionResult GetRestaurantImageById([FromRoute]int Id = 0)
-        {
-            if (Id == 0)
-                return BadRequest("Image is null!");
+        //[HttpGet]
+        //[Route("image/{Id}")]
+        //public IActionResult GetRestaurantImageById([FromRoute]int Id = 0)
+        //{
+        //    if (Id == 0)
+        //        return BadRequest("Image is null!");
 
-            var images = restaurantService.GetAllImagesByRestaurantId(Id);
-            if (images == null)
-                return NotFound();
+        //    var images = restaurantService.GetAllImagesByRestaurantId(Id);
+        //    if (images == null)
+        //        return NotFound();
 
-            return Ok(images);
-        }
+        //    return Ok(images);
+        //}
 
-        [HttpGet]
-        [Route("work/{Id}")]
-        public IActionResult GetRestaurantWorkById([FromRoute]int Id = 0)
-        {
-            if (Id == 0)
-                return BadRequest("Image is null!");
+        //[HttpGet]
+        //[Route("work/{Id}")]
+        //public IActionResult GetRestaurantWorkById([FromRoute]int Id = 0)
+        //{
+        //    if (Id == 0)
+        //        return BadRequest("Image is null!");
 
-            var work = restaurantService.GetWorkingHoursByRestaurantId(Id);
-            if (work == null)
-                return NotFound();
+        //    var work = restaurantService.GetWorkingHoursByRestaurantId(Id);
+        //    if (work == null)
+        //        return NotFound();
 
-            return Ok(work);
-        }
+        //    return Ok(work);
+        //}
 
         [HttpGet("categories")]
         public IActionResult GetRestaurantCategories()

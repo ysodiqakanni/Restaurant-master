@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+ 
+using Microsoft.EntityFrameworkCore; 
 
 namespace ServiceLayer.Implementations
 {
@@ -23,11 +25,27 @@ namespace ServiceLayer.Implementations
             uow.Complete();
         }
 
-        public Meal EditMeal(Meal meal)
+        public Meal EditMeal(Meal meal, List<MealContent> mealContents)
         {
             if (meal == null)
                 throw new ArgumentNullException("Meal cannot be null");
+
+            uow.MealContentRepository.RemoveRange(meal.MealContents);
+            if (mealContents != null && mealContents.Any())
+            {
+                meal.MealContents = mealContents; 
+            }
             uow.Complete();
+            return meal;
+        }
+
+        public Meal GetMealById(int id)
+        { 
+            var meal = uow.MealRepository.GetAllIncluding(x => x.MealCategory)
+                .Include(x => x.MealContents)
+                .Include(x => x.MealCategory)
+                .Where(x => x.Id == id).FirstOrDefault();
+
             return meal;
         }
 

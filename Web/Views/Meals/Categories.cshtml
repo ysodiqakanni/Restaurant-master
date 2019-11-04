@@ -1,10 +1,10 @@
-﻿@model IEnumerable<Web.DTO.MealDTO>
+﻿@model IEnumerable<Web.DTO.MealCategoryResponseDTO>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "GetAll Meal Categories";
 }
 
-<h1 class="text-danger">List of meals</h1>
-
+<h1>Get All Meal Categories</h1>
+@Html.ActionLink("Add New", "AddCategory") 
 <table class="table">
     <tr>
         <th>
@@ -14,9 +14,8 @@
             @Html.DisplayNameFor(model => model.Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Price)
+            @Html.DisplayNameFor(model => model.Priority)
         </th>
-
         <th></th>
     </tr>
 
@@ -30,12 +29,12 @@
             @Html.DisplayFor(modelItem => item.Name)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Price)
+            @Html.DisplayFor(modelItem => item.Priority)
         </td>
 
         <td>
 
-            @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+            @Html.ActionLink("Edit", "EditMealCategory", new { id = item.Id })
 
         </td>
     </tr>
@@ -43,8 +42,4 @@
 
 </table>
 
-
-<p>@Html.ActionLink("Add new meal", "AddMeal", "Restaurants")</p>
-<p>@Html.ActionLink("Add new meal-type", "AddMealType", "Meals")</p>
-<p>@Html.ActionLink("Meal categories", "Categories", "Meals")</p>
-
+@Html.ActionLink("Back to Meals", "Categories", "Meal") 

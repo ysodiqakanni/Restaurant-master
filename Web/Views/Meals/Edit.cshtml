@@ -1,0 +1,182 @@
+﻿@model Web.Models.AddMealViewModel
+@{
+    ViewData["Title"] = "AddMeal";
+}
+
+<h2>Add Meal</h2>
+
+
+@using (Html.BeginForm("Edit", "Restaurants", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="text-danger">
+        @Html.ValidationSummary()
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-2">
+            @Html.LabelFor(m => m.Name)
+        </div>
+        <div class=" col-md-6">
+            @Html.EditorFor(m => m.Name)
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(m => m.Price)
+        </div>
+        <div class=" col-md-6">
+            @Html.EditorFor(m => m.Price)
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(m => m.LocalPriority)
+        </div>
+        <div class=" col-md-6">
+            @Html.EditorFor(m => m.LocalPriority)
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(m => m.GeneralPriority)
+        </div>
+        <div class=" col-md-6">
+            @Html.EditorFor(m => m.GeneralPriority)
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(m => m.Description)
+        </div>
+        <div class=" col-md-10">
+            @Html.TextAreaFor(m => m.Description)
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-2">
+            Meal Category
+        </div>
+        <div class=" col-md-10">
+            @Html.DropDownList("MealCategoryId")
+            @*@Html.DropDownList("MealCategoryId", new SelectList(ViewBag.MealCategoryId, "Id", "Name"), "Select")*@
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-2">
+            Select Restaurant
+        </div>
+        <div class=" col-md-10">
+            @Html.DropDownList("RestaurantId", null, new { @onchange = "restaurantChange(this)" })
+            @*@Html.DropDownList("RestaurantId", new SelectList(ViewBag.RestaurantId, "Id", "Name"), "Select", new { @onchange = "restaurantChange(this)" })*@
+            @*@Html.DropDownList("RestaurantId", new SelectList(ViewBag.RestaurantId, "Id", "Name"), "Select", new { @onchange = "restaurantChange(this)" })*@
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-2">
+            Meal Type
+        </div>
+        <div class=" col-md-10">
+            <select name="MealTypeId" id="MealTypeId">
+                <option value=0>Select</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(m => m.MealImage)
+        </div>
+        <div class=" col-md-6">
+            @Html.EditorFor(m => m.MealImage)
+        </div>
+    </div>
+
+
+
+    <button id="addNewMealContent" type="button">Add Meal Content</button>
+    <br /><br />
+    <table id="meal-contents-table">
+        <tbody></tbody>
+    </table>
+    <hr />
+
+
+    <div>
+        <input type="submit" value="Submit" />
+    </div>
+
+}
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script type="text/javascript">
+    function restaurantChange(el) {
+        debugger;
+        let id = el.value;
+        const url = "/restaurants/GetMealTypesForRestaurant/?restaurantId=" + id;
+        $.ajax({
+            type: "GET",
+            url: url,
+            contentType: "application/json",
+            processData: false,
+            success: function (response) {
+                if (response.success) {
+                    var mt = document.getElementById("MealTypeId")
+                    var length = mt.options.length;
+                    for (i = 1; i < length; i++) {
+                        mt.options[i] = null;
+                    }
+
+                    let data = response.msg;
+                    for (ind in data) {
+                        var opt = document.createElement("option");
+                        opt.value = data[ind].id;
+                        opt.innerHTML = data[ind].name;
+
+                        // then append it to the select element
+                        mt.appendChild(opt);
+                    }
+                }
+                else {
+                    alert('an error occured!');
+                }
+            },
+            error: function (er) {
+                alert('an unknown error occured!');
+            }
+        })
+    }
+
+    var hidden = '@Html.Hidden("MealContents.Index", "{id}")';
+    var nameHtml = '<input type="text" placeholder="Name" name="MealContents[{id}].Name"/>';
+    var priceHtml = '<input type="number" placeholder="Price" name="MealContents[{id}].Price"/>';
+    var priorityHtml = '<input type="number" placeholder="Priority" name="MealContents[{id}].Priority"/>';
+    var typeHtml = '<input type="number" placeholder="Type" name="MealContents[{id}].Type"/>';
+    var imageHtml = ' <input name="MealContents[{id}].ImageFile" type="file" accept="image/x-png,image/gif,image/jpeg" required/>';//  '@Html.Editor("MealContents[{id}].ImageFile")';
+
+    $("#addNewMealContent").on("click", function () {
+            var time = Date.now();
+
+            var deleteHtml = "<button type='button' onclick='deleteMealContentRow(this)' style='color:red'>Delete</button>";
+
+        $("#meal-contents-table").find("tbody")
+            .append($("<tr><td>" + hidden.replace("{id}", time) + deleteHtml + "</td>" +
+                "<td>" + nameHtml.replace("{id}", time) + "</td>" +
+                "<td>" + priceHtml.replace("{id}", time) + "</td>" +
+                "<td>" + priorityHtml.replace("{id}", time) + "</td>" +
+                "<td>" + typeHtml.replace("{id}", time) + "</td>" +
+                "<td>" + imageHtml.replace("{id}", time) + "</td></tr>"));
+    });
+
+
+    function deleteMealContentRow(el) {
+        if (confirm('Are you sure you want to remove this record?')) {
+            $(el).closest("tr").remove();
+        }
+    }
+</script>
