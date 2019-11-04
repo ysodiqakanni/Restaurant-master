@@ -49,4 +49,11 @@ namespace ServiceLayer.DTO
 
         public virtual List<MealContent> MealContents { get; set; }
     }
+
+    public class MealTypeResponseDTO
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int RestaurantId { get; set; }
+    }
 }

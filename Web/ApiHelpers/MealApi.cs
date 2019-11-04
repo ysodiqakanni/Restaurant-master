@@ -68,5 +68,68 @@ namespace Web.ApiHelpers
                 return result;
             }
         }
+        public async Task UpdateMealCategory(CreateMealCategoryViewModel data)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseUrl);
+                var httpContent = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+                HttpResponseMessage msg = await client.PutAsync($"meals/category/{data.Id}", httpContent);
+                msg.EnsureSuccessStatusCode();
+            }
+        }
+        public async Task<List<MealTypeDTO>> GetAllMealType()
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseUrl);
+                HttpResponseMessage msg = await client.GetAsync("meals/types");
+                msg.EnsureSuccessStatusCode();
+                var result = await msg.Content.ReadAsAsync<List<MealTypeDTO>>();
+                return result;
+            }
+        }
+        public async Task<List<MealTypeDTO>> GetAllMealTypeByRestaurantId(int restaurantId)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseUrl);
+                HttpResponseMessage msg = await client.GetAsync($"meals/types/{restaurantId}");
+                msg.EnsureSuccessStatusCode();
+                var result = await msg.Content.ReadAsAsync<List<MealTypeDTO>>();
+                return result;
+            }
+        }
+        public async Task<MealTypeDTO> GetAllMealTypeById(int Id)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseUrl);
+                HttpResponseMessage msg = await client.GetAsync($"meals/types/ById/{Id}");
+                msg.EnsureSuccessStatusCode();
+                var result = await msg.Content.ReadAsAsync<MealTypeDTO>();
+                return result;
+            }
+        }
+        public async Task AddMealType(CreateMealTypeViewModel data)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseUrl);
+                var httpContent = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+                HttpResponseMessage msg = await client.PostAsync("meals/types/create", httpContent);
+                msg.EnsureSuccessStatusCode();
+            }
+        }
+        public async Task UpdateMealType(CreateMealTypeViewModel mealType)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseUrl);
+                var httpContent = new StringContent(JsonConvert.SerializeObject(mealType), Encoding.UTF8, "application/json");
+                HttpResponseMessage msg = await client.PutAsync("meals/types/edit", httpContent);
+                msg.EnsureSuccessStatusCode();
+            }
+        }
     }
 }

@@ -12,5 +12,6 @@ namespace ServiceLayer.Contracts
         Task<MealType> AddMealType(MealType mealType);
         Task<MealType> EditMealType(MealType mealType);
         List<MealType> GetAllMealTypesByRestaurantId(int restaurantid);
+        MealType GetMealTypeById(int Id);
     }
 }

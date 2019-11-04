@@ -17,11 +17,13 @@ namespace Api.Controllers
         IMealService mealService;
         IMealCategoryService mealCategoryService;
         IRestaurantService restaurantService;
-        public MealsController(IMealService _mealService, IMealCategoryService _mealCategoryService, IRestaurantService _restaurantService)
+        IMealTypeService mealTypeService;
+        public MealsController(IMealService _mealService, IMealCategoryService _mealCategoryService, IRestaurantService _restaurantService, IMealTypeService _mealTypeService)
         {
             mealService = _mealService;
             restaurantService = _restaurantService;
             mealCategoryService = _mealCategoryService;
+            mealTypeService = _mealTypeService;
         }
 
         [HttpGet] 
@@ -222,9 +224,73 @@ namespace Api.Controllers
         [Route("types/{restaurantId}")]
         public IActionResult GetMealTypes([FromRoute] int restaurantId)
         {
-            var mealTypes = restaurantService.GetAllMealTypesByRestaurantId(restaurantId);
+            var mealTypes = mealTypeService.GetAllMealTypesByRestaurantId(restaurantId);
+            return Ok(mealTypes);
+        }
+        [HttpGet]
+        [Route("types/ById/{Id}")]
+        public IActionResult GetMealTypesById([FromRoute] int Id)
+        {
+            var mealTypes = mealTypeService.GetMealTypeById(Id);
             return Ok(mealTypes);
         }
 
+        [HttpGet]
+        [Route("types")]
+        public async Task<IActionResult> GetAllMealTypes()
+        {
+            var mealTypes = await mealTypeService.GetAllMealTypes();
+            return Ok(mealTypes);
+        }
+
+        [HttpPost("types/create")]
+        public async Task<IActionResult> AddMealType([FromBody]MealType mealType)
+        {
+            if (mealType == null)
+                return BadRequest("Request is null!");
+
+            if (!ModelState.IsValid)
+                return BadRequest("Data validation errors!");
+
+            var meal = new MealType()
+            {
+                Name = mealType.Name,
+                RestaurantId = mealType.RestaurantId,
+                DateCreated = DateTime.Now,
+                DateUpdated = DateTime.Now,
+            };
+            var mealCreated = await mealTypeService.AddMealType(meal);
+
+            return Ok(mealCreated);
+        }
+
+        [HttpPut("types/edit")]
+        public IActionResult EditMealType([FromBody]MealType mealType)
+        {
+            if (mealType == null)
+                return BadRequest("Request is null!");
+
+            if (!ModelState.IsValid)
+                return BadRequest("Data validation errors!");
+
+            try
+            {
+                var mealTypeResponse = mealTypeService.GetMealTypeById(mealType.Id);
+                if (mealTypeResponse == null)
+                    return NotFound();
+
+                mealTypeResponse.Name = mealType.Name;
+                mealTypeResponse.DateUpdated = DateTime.Now;
+                mealTypeResponse.RestaurantId = mealType.RestaurantId;
+
+                mealTypeService.EditMealType(mealType);
+                return Ok("Meal Type Updated");
+            }
+            catch(Exception ex)
+            {
+                return BadRequest("An error occured while updating meal type");
+            }
+
+        }
     }
 }

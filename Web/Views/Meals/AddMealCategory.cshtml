@@ -6,13 +6,13 @@
 
 <h1>Add Meal Category</h1>
 <h1 style="color:red">@ViewBag.Error</h1>
-@using (Html.BeginForm("EditMealCategory", "Meals", FormMethod.Post))
+@using (Html.BeginForm("AddMealCategory", "Meals", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Id)
+        @*@Html.HiddenFor(model => model.Id)*@
         <div class="form-group">
             @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">

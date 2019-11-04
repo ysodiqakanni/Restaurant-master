@@ -65,5 +65,11 @@ namespace ServiceLayer.Implementations
             return uow.MealTypeRepository.QueryAll()
                 .Where(x => x.RestaurantId == restaurantid).ToList();
         }
+
+        public MealType GetMealTypeById(int Id)
+        {
+            return uow.MealTypeRepository
+                .Find(x => x.Id == Id).FirstOrDefault();
+        }
     }
 }

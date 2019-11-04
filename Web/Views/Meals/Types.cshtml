@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Web.DTO.MealTypeDTO>
+@{
+    ViewData["Title"] = "GetAllMealType";
+}
+
+<h1>Get All MealType</h1>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+
+            <td>
+
+                @Html.ActionLink("Edit", "EditMealType", new { id = item.Id })
+
+            </td>
+        </tr>
+    }
+
+</table>
+
+
+<p>@Html.ActionLink("Add new meal", "AddMeal", "Restaurants")</p>
+<p>@Html.ActionLink("Add new meal-type", "AddMealType", "Meals")</p>
+<p>@Html.ActionLink("Meal categories", "Categories", "Meals")</p>
