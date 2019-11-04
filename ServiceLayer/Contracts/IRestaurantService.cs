@@ -22,5 +22,6 @@ namespace ServiceLayer.Contracts
         List<RestaurantImage> GetAllImagesByRestaurantId(int restaurantid);
         Task<Restaurant> UpdateRestaurant(Restaurant restaurant, List<RestaurantImage> images, List<WorkingHour> hours);
         List<WorkingHour> GetWorkingHoursByRestaurantId(int restaurantid);
+        List<Restaurant> GetRestaurantByAreaId(int areaId);
     }
 }

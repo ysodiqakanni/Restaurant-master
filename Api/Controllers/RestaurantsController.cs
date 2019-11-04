@@ -323,6 +323,20 @@ namespace Api.Controllers
             return Ok(areas);
         }
 
+        [HttpGet]
+        [Route("areas/{Id}")]
+        public IActionResult GetRestaurantByAreaId([FromRoute]int Id = 0)
+        {
+            if (Id == 0)
+                return BadRequest("Area is null!");
+
+            var categories = restaurantService.GetRestaurantByAreaId(Id);
+            if (categories == null)
+                return NotFound();
+
+            return Ok(categories);
+        }
+
         #region Private Methods
         private RestaurantResponseDTO GetRestaurantResponse(Restaurant rest)
         {

@@ -11,5 +11,6 @@ namespace ServiceLayer.Contracts
         Meal EditMeal(Meal meal, List<MealContent> mealContents);
         List<Meal> GetMeals();
         Meal GetMealById(int id);
+        List<Meal> GetMealByCategoryId(int categoryId);
     }
 }

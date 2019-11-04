@@ -65,6 +65,15 @@ namespace Api.Controllers
             return Ok(data);
         }
 
+        [HttpGet]
+        [Route("bycategory/{id}")]
+        public IActionResult GetByCategoryId([FromRoute]int categoryId)
+        {
+            var data = mealService.GetMealByCategoryId(categoryId);
+            
+            return Ok(data);
+        }
+
 
         [HttpPost]
         [Route("")]

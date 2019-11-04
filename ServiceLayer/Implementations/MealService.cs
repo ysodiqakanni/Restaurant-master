@@ -49,6 +49,16 @@ namespace ServiceLayer.Implementations
             return meal;
         }
 
+        public List<Meal> GetMealByCategoryId(int categoryId)
+        {
+            var meal = uow.MealRepository.GetAllIncluding(x => x.MealCategory)
+                .Include(x => x.MealContents)
+                .Include(x => x.MealCategory)
+                .Where(x => x.MealCategoryId == categoryId).ToList();
+
+            return meal;
+        }
+
         public List<Meal> GetMeals()
         {
             return uow.MealRepository.GetAll().ToList();

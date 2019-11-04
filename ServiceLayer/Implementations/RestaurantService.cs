@@ -85,6 +85,11 @@ namespace ServiceLayer.Implementations
             return uow.AreaRepository.GetAll().ToList();
         }
 
+        public List<Restaurant> GetRestaurantByAreaId(int areaId)
+        {
+            return GetAllIncluding().Where(r => r.AreaId == areaId).ToList();
+        }
+
         public List<RestaurantCategory> GetRestaurantCategories()
         {
             return uow.RestaurantCategoryRepository.GetAll().ToList();
