@@ -1,19 +1,19 @@
 ﻿@model Web.Models.AddMealViewModel
 @{
-    ViewData["Title"] = "AddMeal";
+    ViewData["Title"] = "EditMeal";
 }
 
-<h2>Add Meal</h2>
+<h2>Edit Meal</h2>
 
 
-@using (Html.BeginForm("Edit", "Restaurants", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Edit", "Meals", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 
     <div class="text-danger">
         @Html.ValidationSummary()
     </div>
-
+    @Html.HiddenFor(model => model.Id)
     <div class="form-group row">
         <div class="col-md-2">
             @Html.LabelFor(m => m.Name)
@@ -93,7 +93,9 @@
             @Html.DisplayNameFor(m => m.MealImage)
         </div>
         <div class=" col-md-6">
-            @Html.EditorFor(m => m.MealImage)
+            @*@Html.EditorFor(m => m.MealImage)*@
+            <input name="MealImage" type="file" accept="image/x-png,image/gif,image/jpeg" value="MealImage" required />
+
         </div>
     </div>
 
@@ -116,7 +118,7 @@
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script type="text/javascript">
     function restaurantChange(el) {
-        debugger;
+        //debugger;
         let id = el.value;
         const url = "/restaurants/GetMealTypesForRestaurant/?restaurantId=" + id;
         $.ajax({
@@ -152,7 +154,7 @@
         })
     }
 
-    var hidden = '@Html.Hidden("MealContents.Index", "{id}")';
+   var hidden = '@Html.Hidden("MealContents.Index", "{id}")';
     var nameHtml = '<input type="text" placeholder="Name" name="MealContents[{id}].Name"/>';
     var priceHtml = '<input type="number" placeholder="Price" name="MealContents[{id}].Price"/>';
     var priorityHtml = '<input type="number" placeholder="Priority" name="MealContents[{id}].Priority"/>';

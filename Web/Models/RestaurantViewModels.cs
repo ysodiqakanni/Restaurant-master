@@ -58,6 +58,7 @@ namespace Web.Models
 
     public class AddMealViewModel
     {
+        public int Id { get; set; }
         [Required]
         [Display(Name = "Meal Name")]
         public string Name { get; set; }
@@ -79,7 +80,7 @@ namespace Web.Models
         public int MealTypeId { get; set; }
 
         [Display(Name = "Meal image")]
-        [DataType(DataType.Upload), Required]
+        [DataType(DataType.Upload), Required(ErrorMessage ="You must Select a Meal Image")]
         public IFormFile MealImage { get; set; }
 
         public List<MealContentViewModel> MealContents { get; set; }

@@ -62,18 +62,19 @@ namespace Web.Controllers
                     }
 
                     await mealApi.UpdateMeal(model);
-                    return RedirectToAction("Success");
+                    return RedirectToAction("index");
                 }
                 catch (Exception ex)
                 {
                     ModelState.AddModelError("", "An error occured during update!");
+                    return View(model);
                 }
             }
             var allRestaurants = await restaurantApi.GetAllRestaurants();
             var mealCategories = await restaurantApi.GetAllMealCategories();
 
-            ViewBag.RestaurantId = allRestaurants;
-            ViewBag.MealCategoryId = mealCategories;
+            ViewBag.RestaurantId = new SelectList(allRestaurants, "Id", "Name", model.RestaurantId);
+            ViewBag.MealCategoryId = new SelectList(mealCategories, "Id", "Name", model.MealCategoryId);
             return View(model);
         }
         
