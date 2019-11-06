@@ -348,7 +348,8 @@ namespace Web.Controllers
         private string SaveRestaurantImageAndGetUri(IFormFile formFile)
         {
             string uniqueFileName = "";
-            string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "Images/RestaurantImage");
+            //string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "Images/RestaurantImage");
+            string uploadsFolder = "wwwroot/Images/RestaurantImage";
             Directory.CreateDirectory(uploadsFolder);
             // To make sure the file name is unique we are appending a new
             // GUID value and and an underscore to the file name
