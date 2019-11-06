@@ -58,25 +58,35 @@ namespace Web.ApiHelpers
             }
         }
 
-        public async Task<AreaBasicResponseDTO> GetRestaurantCaregoryById(int categoryId)
+        public async Task<RestaurantCategoryResponseDTO> GetRestaurantCaregoryById(int categoryId)
         {
             using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = new Uri(baseUrl);
                 HttpResponseMessage msg = await client.GetAsync($"restaurants/categories/{categoryId}");
                 msg.EnsureSuccessStatusCode();
-                var result = await msg.Content.ReadAsAsync<AreaBasicResponseDTO>();
+                var result = await msg.Content.ReadAsAsync<RestaurantCategoryResponseDTO>();
                 return result;
             }
         }
 
-        public async Task UpdateRestaurantCategory(AreaBasicResponseDTO data)
+        public async Task UpdateRestaurantCategory(RestaurantCategoryResponseDTO data)
         {
             using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = new Uri(baseUrl);
                 var httpContent = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
                 HttpResponseMessage msg = await client.PutAsync($"restaurants/categories/edit/{data.Id}", httpContent);
+                msg.EnsureSuccessStatusCode();
+            }
+        }
+
+        public async Task DeleteRestaurantCategory(int Id)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseUrl);
+                HttpResponseMessage msg = await client.DeleteAsync($"restaurants/categories/delete/{Id}");
                 msg.EnsureSuccessStatusCode();
             }
         }

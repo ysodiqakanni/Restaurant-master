@@ -1,4 +1,4 @@
-﻿@model  Web.Models.AddRestaurantCategoryViewModel
+﻿@model Web.Models.AddRestaurantCategoryViewModel
 @{
     ViewData["Title"] = "AddRestaurantCategory";
 }
@@ -19,6 +19,14 @@
         </div>
         <div class=" col-md-6">
             @Html.EditorFor(m => m.Name)
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-2">
+            @Html.LabelFor(m => m.Priority)
+        </div>
+        <div class=" col-md-6">
+            @Html.EditorFor(m => m.Priority)
         </div>
     </div>
 

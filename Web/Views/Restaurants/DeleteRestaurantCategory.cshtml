@@ -1,0 +1,27 @@
+﻿@model Web.DTO.RestaurantCategoryResponseDTO
+@{
+    ViewData["Title"] = "DeleteRestaurantCategory";
+}
+
+<h1>Delete Restaurant Category</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <p>@Html.DisplayNameFor(model => model.Name)</p>
+            <p>@Html.DisplayFor(model => model.Name)</p>
+            <br />
+            <p>@Html.DisplayNameFor(model => model.Priority)</p>
+            <p>@Html.DisplayFor(model => model.Priority)</p>
+        </div>
+    </div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-primary" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

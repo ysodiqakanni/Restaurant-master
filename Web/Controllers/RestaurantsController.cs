@@ -8,12 +8,19 @@ using Web.Models;
 using System.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Web.Controllers
 {
     public class RestaurantsController : Controller
     {
         RestaurantApi restaurantApi = new RestaurantApi();
+        private readonly IHostingEnvironment hostingEnvironment;
+        public RestaurantsController(IHostingEnvironment hostingEnvironment)
+        {
+            this.hostingEnvironment = hostingEnvironment;
+        }
 
         public async Task<IActionResult> Index()
         {
@@ -128,7 +135,7 @@ namespace Web.Controllers
                     var file = model.MealImage;
                     if (file != null && file.Length > 0)
                     {
-                        string uri = SaveMealImageAndGetUri(file);
+                        string uri = ImageSave(file, "mealImage");
                         model.ImageUrl = uri;
                     }
                 }
@@ -199,6 +206,7 @@ namespace Web.Controllers
             EditRestaurantCategoryViewModel editAreaViewModel = new EditRestaurantCategoryViewModel()
             {
                 Name = category.Name,
+                Priority = category.Priority,
             };
 
             return View(editAreaViewModel);
@@ -217,6 +225,7 @@ namespace Web.Controllers
                         return NotFound();
 
                     category.Name = model.Name;
+                    category.Priority = model.Priority;
                     await restaurantApi.UpdateRestaurantCategory(category);
                     return RedirectToAction("GetAllRestaurantCategories");
                 }
@@ -229,7 +238,41 @@ namespace Web.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> GetMealTypesForRestaurant(int restaurantId)
+        public async Task<IActionResult> DeleteRestaurantCategory(int? id)
+        {
+            if (id == 0)
+                return BadRequest("Id is null!");
+
+            var category = await restaurantApi.GetRestaurantCaregoryById(id.Value);
+
+            if (category == null)
+                return NotFound();
+
+            return View(category);
+        }
+
+        [HttpPost, ActionName("DeleteRestaurantCategory")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteRestaurantCategoryConfirmed(int? id)
+        {
+            try
+            {
+                await restaurantApi.DeleteRestaurantCategory(id.Value);
+                return RedirectToAction("GetAllRestaurantCategories");
+            }
+            catch
+            {
+                ModelState.AddModelError("", "An Unknown Error ocurred");
+            }
+            var category = await restaurantApi.GetRestaurantCaregoryById(id.Value);
+
+            if (category == null)
+                return NotFound();
+
+            return View(category);
+        }
+
+            public async Task<IActionResult> GetMealTypesForRestaurant(int restaurantId)
         {
             if (restaurantId < 1)
                 return Json(new { success = false });
@@ -273,7 +316,8 @@ namespace Web.Controllers
                 for (int i = 0; i < files.Count; i++)
                 {
                     // save file and get the uri
-                    string uri = SaveRestaurantImageAndGetUri(files[i]);
+                    //string uri = SaveRestaurantImageAndGetUri(files[i]);
+                    string uri = ImageSave(files[i], "restaurant");
                     var img = model.Images[i];
                     img.ImageUrl = uri;
                     images.Add(img);
@@ -281,17 +325,61 @@ namespace Web.Controllers
             }
         }
 
+        public string ImageSave(IFormFile photo, string to)
+        {
+            string filePath = "";
+            if (to == "restaurant")
+            {
+                filePath = SaveRestaurantImageAndGetUri(photo);
+            }else if(to == "mealImage")
+            {
+                filePath = SaveMealImageAndGetUri(photo);
+            }
+            else if(to == "mealcontent")
+            {
+                filePath = SaveMealContentImageAndGetUri(photo);
+            }
+            
+            // copy the file to wwwroot/images folder
+            photo.CopyTo(new FileStream(filePath, FileMode.Create));
+            return filePath;
+        }
+        
         private string SaveRestaurantImageAndGetUri(IFormFile formFile)
         {
-            return "/path/RestaurantImages/" + formFile.FileName;
+            string uniqueFileName = "";
+            string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "Images/RestaurantImage");
+            Directory.CreateDirectory(uploadsFolder);
+            // To make sure the file name is unique we are appending a new
+            // GUID value and and an underscore to the file name
+            uniqueFileName = Guid.NewGuid().ToString() + "_" + formFile.FileName;
+            //string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "RestaurantImage", uniqueFileName);
+            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+            return filePath;
         }
         private string SaveMealImageAndGetUri(IFormFile formFile)
         {
-            return "/path/MealImages/" + formFile.FileName;
+            string uniqueFileName = "";
+            string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "Images/MealImages");
+            Directory.CreateDirectory(uploadsFolder);
+            // To make sure the file name is unique we are appending a new
+            // GUID value and and an underscore to the file name
+            uniqueFileName = Guid.NewGuid().ToString() + "_" + formFile.FileName;
+            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+            return filePath;
+            //return "/path/MealImages/" + formFile.FileName;
         }
         private string SaveMealContentImageAndGetUri(IFormFile formFile)
         {
-            return "/path/MealContentImages/" + formFile.FileName;
+            string uniqueFileName = "";
+            string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "Images/MealContentImages");
+            Directory.CreateDirectory(uploadsFolder);
+            // To make sure the file name is unique we are appending a new
+            // GUID value and and an underscore to the file name
+            uniqueFileName = Guid.NewGuid().ToString() + "_" + formFile.FileName;
+            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+            return filePath;
+            //return "/path/MealContentImages/" + formFile.FileName;
         }
     }
 }

@@ -42,7 +42,7 @@ namespace ServiceLayer.Implementations
                 {
                     Id = r.Id,
                     Name = r.Name,
-                    Address = r.Address
+                    Description = r.Description
                 }).ToList();
             return all;
         }

@@ -277,6 +277,7 @@ namespace Api.Controllers
             var category = new RestaurantCategory()
             {
                 Name = categoryCreateDTO.Name,
+                Priority = categoryCreateDTO.Priority,
             };
             var categoryCreated = restaurantService.CreateNewRestaurantCategory(category);
 
@@ -297,6 +298,7 @@ namespace Api.Controllers
                 return NotFound();
 
             restaurantCategory.Name = restaurantRequest.Name;
+            restaurantCategory.Priority = restaurantRequest.Priority;
             restaurantCategory.DateUpdated = DateTime.Now;
 
             var response = restaurantService.UpdateRestaurantCategory(restaurantCategory);
