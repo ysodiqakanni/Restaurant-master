@@ -33,7 +33,9 @@ namespace Api.Controllers
             {
                 Id = x.Id,
                 Name = x.Name,
-                Price = x.Price
+                Price = x.Price,
+                MealType = x.MealType,
+                MealCategory = x.MealCategory
             });
 
             return Ok(data);
@@ -66,7 +68,7 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        [Route("bycategory/{id}")]
+        [Route("bycategory/{categoryId}")]
         public IActionResult GetByCategoryId([FromRoute]int categoryId)
         {
             var data = mealService.GetMealByCategoryId(categoryId);

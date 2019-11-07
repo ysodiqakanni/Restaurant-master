@@ -34,8 +34,8 @@ namespace Api.Controllers
             var response = new List<RestaurantResponseDTO>();
             if (restaurants == null || !restaurants.Any())
                 return Ok(response);
-            response = GetRestaurantResponse(restaurants);
-            return Ok(response); 
+            response = GetRestaurantResponseAll(restaurants);
+            return Ok(response.ToList()); 
         }
 
         [HttpGet("basic-details")]
@@ -357,7 +357,8 @@ namespace Api.Controllers
                 Area = rest.Area?.Name,
                 Category = rest.RestaurantCategory?.Name,
                 AreaId = rest.AreaId.Value,
-                RestaurantCategoryId = rest.RestaurantCategoryId.Value
+                RestaurantCategoryId = rest.RestaurantCategoryId.Value,
+                Meals = rest.Meals
             };
 
             // get images
@@ -394,10 +395,38 @@ namespace Api.Controllers
                 }
                 resp.WorkingHours = workingImages;
             }
+            // get Meals
+            if (rest.Meals != null && rest.Meals.Any())
+            {
+                var meals = new List<Meal>();
+                foreach (var meal in rest.Meals)
+                {
+                    meals.Add(
+                        new Meal
+                        {
+                            Id = meal.Id,
+                            DateCreated = meal.DateCreated,
+                            DateUpdated =  meal.DateUpdated,
+                            ImageUrl = meal.ImageUrl,
+                            GeneralPriority = meal.GeneralPriority,
+                            LocalPriority = meal.LocalPriority,
+                            MealCategory = meal.MealCategory,
+                            MealContents = meal.MealContents,
+                            MealType = meal.MealType,
+                            Name = meal.Name,
+                            Price = meal.Price,
+                            RestaurantId = meal.RestaurantId,
+                            Description = meal.Description,
+                            MealCategoryId = meal.MealCategoryId,
+                            MealTypeId = meal.MealTypeId
+                        });
+                }
+                resp.Meals = meals;
+            }
             return resp;
         }
 
-        private List<RestaurantResponseDTO> GetRestaurantResponse(List<Restaurant> restaurants)
+        private List<RestaurantResponseDTO> GetRestaurantResponseAll(List<Restaurant> restaurants)
         {
             var result = new List<RestaurantResponseDTO>();
             foreach (var item in restaurants)

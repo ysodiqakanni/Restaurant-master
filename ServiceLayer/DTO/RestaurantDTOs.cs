@@ -78,6 +78,7 @@ namespace ServiceLayer.DTO
 
         public DateTime DateUpdated { get; set; }
         public DateTime DateCreated { get; set; }
+        public List<Meal> Meals { get; set; }
         public List<ImageResponseDTO> Images { get; set; }
         public List<WorkingHourResponseDTO> WorkingHours { get; set; } 
     }

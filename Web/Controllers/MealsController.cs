@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -15,6 +17,11 @@ namespace Web.Controllers
     {
         MealApi mealApi = new MealApi();
         RestaurantApi restaurantApi = new RestaurantApi();
+        private readonly IHostingEnvironment hostingEnvironment;
+        public MealsController(IHostingEnvironment hostingEnvironment)
+        {
+            this.hostingEnvironment = hostingEnvironment;
+        }
 
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -48,7 +55,7 @@ namespace Web.Controllers
                         var file = model.MealImage;
                         if (file != null && file.Length > 0)
                         {
-                            string uri = SaveMealImageAndGetUri(file);
+                            string uri = ImageSave(file, "mealImage");
                             model.ImageUrl = uri;
                         }
                     }
@@ -57,7 +64,7 @@ namespace Web.Controllers
                     {
                         foreach (var content in model.MealContents)
                         {
-                            content.ImageUrl = SaveMealContentImageAndGetUri(model.MealImage);
+                            content.ImageUrl = ImageSave(model.MealImage, "mealcontent");
                         }
                     }
 
@@ -224,15 +231,57 @@ namespace Web.Controllers
 
             return View(model);
         }
+        public string ImageSave(IFormFile photo, string to)
+        {
+            string filePath = "";
+            if (to == "mealImage")
+            {
+                filePath = SaveMealImageAndGetUri(photo);
+            }
+            else if (to == "mealcontent")
+            {
+                filePath = SaveMealContentImageAndGetUri(photo);
+            }
 
+            // copy the file to wwwroot/images folder
+            photo.CopyTo(new FileStream(filePath, FileMode.Create));
+            return filePath;
+        }
         private string SaveMealImageAndGetUri(IFormFile formFile)
         {
-            return "/path/MealImages/" + formFile.FileName;
+            string uniqueFileName = "";
+            //string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "Images/MealImage");
+            string uploadsFolder = "wwwroot/Images/MealImage";
+            Directory.CreateDirectory(uploadsFolder);
+            // To make sure the file name is unique we are appending a new
+            // GUID value and and an underscore to the file name
+            uniqueFileName = Guid.NewGuid().ToString() + "_" + formFile.FileName;
+            //string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "MealImage", uniqueFileName);
+            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+            return filePath;
         }
+
         private string SaveMealContentImageAndGetUri(IFormFile formFile)
         {
-            return "/path/MealContentImages/" + formFile.FileName;
+            string uniqueFileName = "";
+            string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "Images/MealContentImages");
+            Directory.CreateDirectory(uploadsFolder);
+            // To make sure the file name is unique we are appending a new
+            // GUID value and and an underscore to the file name
+            uniqueFileName = Guid.NewGuid().ToString() + "_" + formFile.FileName;
+            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+            return filePath;
+            //return "/path/MealContentImages/" + formFile.FileName;
         }
+
+        //private string SaveMealImageAndGetUri(IFormFile formFile)
+        //{
+        //    return "/path/MealImages/" + formFile.FileName;
+        //}
+        //private string SaveMealContentImageAndGetUri(IFormFile formFile)
+        //{
+        //    return "/path/MealContentImages/" + formFile.FileName;
+        //}
 
     }
 }
