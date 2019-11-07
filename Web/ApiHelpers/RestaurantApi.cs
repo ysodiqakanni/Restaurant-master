@@ -34,6 +34,15 @@ namespace Web.ApiHelpers
             }
         }
 
+        public async Task DeleteRestaurant(int Id)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseUrl);
+                HttpResponseMessage msg = await client.DeleteAsync($"restaurants/delete/{Id}");
+                msg.EnsureSuccessStatusCode();
+            }
+        }
 
         public async Task<List<RestaurantCategoryResponseDTO>> GetAllRestaurantCategories()
         {

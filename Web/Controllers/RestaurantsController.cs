@@ -110,9 +110,39 @@ namespace Web.Controllers
             return View(model);
         }
 
-     
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == 0)
+                return BadRequest("Id is null!");
 
+            var restaurant = await restaurantApi.GetRestaurantById(id.Value);
 
+            if (restaurant == null)
+                return NotFound();
+
+            return View(restaurant);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int? id)
+        {
+            try
+            {
+                await restaurantApi.DeleteRestaurant(id.Value);
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                ModelState.AddModelError("", "An Unknown Error ocurred");
+            }
+            var restaurant = await restaurantApi.GetRestaurantById(id.Value);
+
+            if (restaurant == null)
+                return NotFound();
+
+            return View(restaurant);
+        }
 
         public async Task<IActionResult> AddMeal()
         {

@@ -1,8 +1,9 @@
-﻿@model Web.DTO.RestaurantCategoryResponseDTO
+﻿@model Web.DTO.RestaurantBasicResponseDTO
 @{
-    ViewData["Title"] = "DeleteRestaurantCategory";
+    ViewData["Title"] = "Delete";
 }
-    <h1>Are you sure you want to Delete this Restaurant Category ?</h1>
+
+<h1>Are you sure you want to Delete this Restaurant ?</h1>
 
 <div class="container">
     <div class="row">
@@ -10,8 +11,8 @@
             <p>@Html.DisplayNameFor(model => model.Name)</p>
             <p>@Html.DisplayFor(model => model.Name)</p>
             <br />
-            <p>@Html.DisplayNameFor(model => model.Priority)</p>
-            <p>@Html.DisplayFor(model => model.Priority)</p>
+            <p>@Html.DisplayNameFor(model => model.Description)</p>
+            <p>@Html.DisplayFor(model => model.Description)</p>
         </div>
     </div>
     @using (Html.BeginForm())

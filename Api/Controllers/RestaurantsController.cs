@@ -158,6 +158,19 @@ namespace Api.Controllers
             return Ok(response);
         }
 
+        [HttpDelete("delete/{Id}")]
+        public IActionResult DeleteRestaurant(int Id = 0)
+        {
+            if (Id == 0)
+                return BadRequest("RestaurantId is null!");
+            Restaurant restaurant = restaurantService.GetRestaurantById(Id);
+            if (restaurant == null)
+                return NotFound();
+            restaurantService.DeleteRestaurant(restaurant);
+
+            return Ok();
+        }
+
         [HttpGet("meal-categories")]
         public async Task<IActionResult> GetMealCategories()
         {

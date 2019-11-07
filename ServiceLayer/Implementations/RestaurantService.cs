@@ -190,5 +190,13 @@ namespace ServiceLayer.Implementations
             uow.RestaurantCategoryRepository.Remove(restaurantCategory);
             uow.Complete();
         }
+
+        public void DeleteRestaurant(Restaurant restaurant)
+        {
+            if (restaurant == null)
+                throw new Exception("Restaurant cannot be null");
+            uow.RestaurantRepository.Remove(restaurant);
+            uow.Complete();
+        }
     }
 }
