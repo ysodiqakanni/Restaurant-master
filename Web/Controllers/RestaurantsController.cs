@@ -174,7 +174,7 @@ namespace Web.Controllers
                 {
                     foreach (var content in model.MealContents)
                     {
-                        content.ImageUrl = SaveMealContentImageAndGetUri(model.MealImage);
+                        content.ImageUrl = Utility.FileHelper.SaveImage(model.MealImage, "MealContentImages");  
                     }
                 }
               
@@ -319,23 +319,7 @@ namespace Web.Controllers
         {
             return View();
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+         
 
         private void GetRestaurantImages(CreateRestaurantViewModel model, List<ImageViewModel> images, Microsoft.AspNetCore.Http.IFormFileCollection files)
         {
@@ -355,62 +339,24 @@ namespace Web.Controllers
             }
         }
 
-        public string ImageSave(IFormFile photo, string to)
+        public string ImageSave(IFormFile photo, string imageType)
         {
             string filePath = "";
-            if (to == "restaurant")
+            if (imageType == "restaurant")
             {
-                filePath = SaveRestaurantImageAndGetUri(photo);
-            }else if(to == "mealImage")
+                filePath = Utility.FileHelper.SaveImage(photo, "RestaurantImage"); 
+            }else if(imageType == "mealImage")
             {
-                filePath = SaveMealImageAndGetUri(photo);
+                filePath = Utility.FileHelper.SaveImage(photo, "MealImages");
             }
-            else if(to == "mealcontent")
+            else if(imageType == "mealcontent")
             {
-                filePath = SaveMealContentImageAndGetUri(photo);
+                filePath = Utility.FileHelper.SaveImage(photo, "MealContentImages");
             }
-            
-            // copy the file to wwwroot/images folder
-            photo.CopyTo(new FileStream(filePath, FileMode.Create));
+             
             return filePath;
         }
-        
-        private string SaveRestaurantImageAndGetUri(IFormFile formFile)
-        {
-            string uniqueFileName = "";
-            //string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "Images/RestaurantImage");
-            string uploadsFolder = "wwwroot/Images/RestaurantImage";
-            Directory.CreateDirectory(uploadsFolder);
-            // To make sure the file name is unique we are appending a new
-            // GUID value and and an underscore to the file name
-            uniqueFileName = Guid.NewGuid().ToString() + "_" + formFile.FileName;
-            //string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "RestaurantImage", uniqueFileName);
-            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-            return filePath;
-        }
-        private string SaveMealImageAndGetUri(IFormFile formFile)
-        {
-            string uniqueFileName = "";
-            string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "Images/MealImages");
-            Directory.CreateDirectory(uploadsFolder);
-            // To make sure the file name is unique we are appending a new
-            // GUID value and and an underscore to the file name
-            uniqueFileName = Guid.NewGuid().ToString() + "_" + formFile.FileName;
-            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-            return filePath;
-            //return "/path/MealImages/" + formFile.FileName;
-        }
-        private string SaveMealContentImageAndGetUri(IFormFile formFile)
-        {
-            string uniqueFileName = "";
-            string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "Images/MealContentImages");
-            Directory.CreateDirectory(uploadsFolder);
-            // To make sure the file name is unique we are appending a new
-            // GUID value and and an underscore to the file name
-            uniqueFileName = Guid.NewGuid().ToString() + "_" + formFile.FileName;
-            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-            return filePath;
-            //return "/path/MealContentImages/" + formFile.FileName;
-        }
+
+       
     }
 }

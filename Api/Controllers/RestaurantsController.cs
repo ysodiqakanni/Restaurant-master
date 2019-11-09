@@ -369,8 +369,8 @@ namespace Api.Controllers
                 DateUpdated = rest.DateUpdated,
                 Area = rest.Area?.Name,
                 Category = rest.RestaurantCategory?.Name,
-                AreaId = rest.AreaId.Value,
-                RestaurantCategoryId = rest.RestaurantCategoryId.Value,
+                AreaId = rest.AreaId == null ? 0 : rest.AreaId.Value,
+                RestaurantCategoryId = rest.RestaurantCategoryId == null ? 0 : rest.RestaurantCategoryId.Value,
                 Meals = rest.Meals
             };
 
