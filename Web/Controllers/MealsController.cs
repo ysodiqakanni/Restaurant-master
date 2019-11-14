@@ -106,6 +106,15 @@ namespace Web.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    if (Request.Form.Files.Any())
+                    {
+                        var file = model.CategoryImage;
+                        if (file != null && file.Length > 0)
+                        {
+                            string uri = ImageSave(file, "categoryImage");
+                            model.ImageUrl = uri;
+                        }
+                    }
                     await mealApi.AddMealCategory(model);
                     return RedirectToAction("Categories");
                 }
@@ -143,6 +152,15 @@ namespace Web.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    if (Request.Form.Files.Any())
+                    {
+                        var file = model.CategoryImage;
+                        if (file != null && file.Length > 0)
+                        {
+                            string uri = ImageSave(file, "categoryImage");
+                            model.ImageUrl = uri;
+                        }
+                    }
                     await mealApi.UpdateMealCategory(model);
                     return RedirectToAction("Categories");
                 }
@@ -234,6 +252,7 @@ namespace Web.Controllers
 
         public string ImageSave(IFormFile photo, string imageType)
         {
+            
             string filePath = "";
             if (imageType == "mealImage")
             {
@@ -242,6 +261,10 @@ namespace Web.Controllers
             else if (imageType == "mealcontent")
             {
                 filePath = Utility.FileHelper.SaveImage(photo, "Mealcontent");
+            }
+            else if (imageType == "categoryImage")
+            {
+                filePath = Utility.FileHelper.SaveImage(photo, "CategoryImage");
             }
 
             return filePath;
