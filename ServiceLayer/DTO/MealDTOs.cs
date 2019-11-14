@@ -36,6 +36,7 @@ namespace ServiceLayer.DTO
     {
         public string Name { get; set; }
         public int Priority { get; set; }
+        public string ImageUrl { get; set; }
     } 
     public class MealResponseDTO
     {

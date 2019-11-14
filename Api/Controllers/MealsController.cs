@@ -191,6 +191,10 @@ namespace Api.Controllers
                     DateCreated = DateTime.Now,
                     DateUpdated = DateTime.Now
                 };
+                if (mealCategory.ImageUrl != null && mealCategory.ImageUrl.Any())
+                {
+                    obj.ImageUrl = mealCategory.ImageUrl;
+                }
                 var response = mealCategoryService.AddMealCategory(obj);
                 return Ok(response);
             }

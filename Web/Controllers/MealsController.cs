@@ -231,57 +231,21 @@ namespace Web.Controllers
 
             return View(model);
         }
-        public string ImageSave(IFormFile photo, string to)
+
+        public string ImageSave(IFormFile photo, string imageType)
         {
             string filePath = "";
-            if (to == "mealImage")
+            if (imageType == "mealImage")
             {
-                filePath = SaveMealImageAndGetUri(photo);
+                filePath = Utility.FileHelper.SaveImage(photo, "MealImage");
             }
-            else if (to == "mealcontent")
+            else if (imageType == "mealcontent")
             {
-                filePath = SaveMealContentImageAndGetUri(photo);
+                filePath = Utility.FileHelper.SaveImage(photo, "Mealcontent");
             }
 
-            // copy the file to wwwroot/images folder
-            photo.CopyTo(new FileStream(filePath, FileMode.Create));
             return filePath;
         }
-        private string SaveMealImageAndGetUri(IFormFile formFile)
-        {
-            string uniqueFileName = "";
-            //string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "Images/MealImage");
-            string uploadsFolder = "wwwroot/Images/MealImage";
-            Directory.CreateDirectory(uploadsFolder);
-            // To make sure the file name is unique we are appending a new
-            // GUID value and and an underscore to the file name
-            uniqueFileName = Guid.NewGuid().ToString() + "_" + formFile.FileName;
-            //string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "MealImage", uniqueFileName);
-            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-            return filePath;
-        }
-
-        private string SaveMealContentImageAndGetUri(IFormFile formFile)
-        {
-            string uniqueFileName = "";
-            string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "Images/MealContentImages");
-            Directory.CreateDirectory(uploadsFolder);
-            // To make sure the file name is unique we are appending a new
-            // GUID value and and an underscore to the file name
-            uniqueFileName = Guid.NewGuid().ToString() + "_" + formFile.FileName;
-            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-            return filePath;
-            //return "/path/MealContentImages/" + formFile.FileName;
-        }
-
-        //private string SaveMealImageAndGetUri(IFormFile formFile)
-        //{
-        //    return "/path/MealImages/" + formFile.FileName;
-        //}
-        //private string SaveMealContentImageAndGetUri(IFormFile formFile)
-        //{
-        //    return "/path/MealContentImages/" + formFile.FileName;
-        //}
-
+       
     }
 }

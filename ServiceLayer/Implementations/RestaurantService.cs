@@ -91,7 +91,8 @@ namespace ServiceLayer.Implementations
                 .Include(r => r.WorkingHours)
                 .Include(r => r.RestaurantCategory)
                 .Include(r => r.Area)
-                .Include(r => r.Meals);
+                .Include(r => r.Meals)
+                .ThenInclude(s => s.MealCategory);
 
             return results;
         }
