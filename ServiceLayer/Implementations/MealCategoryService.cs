@@ -1,6 +1,7 @@
 ﻿using Data.UnitOfWork;
 using DomainModel;
 using ServiceLayer.Contracts;
+using ServiceLayer.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,10 +17,16 @@ namespace ServiceLayer.Implementations
         {
             uow = _uow;
         }
-        public async Task<List<MealCategory>> GetAllMealCategories()
+        public async Task<List<MealCategoryResponseDTO>> GetAllMealCategories()
         {
-            var results = await uow.MealCategoryRepository.GetAllAsync();
-            return results.ToList();
+            var results = uow.MealCategoryRepository.GetAll().Where(m => m.Id > 0)
+                .Select(m => new MealCategoryResponseDTO()
+                {
+                    Id = m.Id,
+                    Name = m.Name,
+                    Priority = m.Priority,
+                }).ToList();
+            return results;
         }
         public async Task<MealCategory> AddMealCategory(MealCategory mealCategory)
         {
