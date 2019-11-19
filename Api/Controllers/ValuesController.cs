@@ -10,7 +10,7 @@ namespace RestaurantProject.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        // GET api/values
+        // GET api/values // extra useless comments
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
